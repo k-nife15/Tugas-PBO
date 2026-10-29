@@ -1,0 +1,7 @@
+{
+  "name": "kalender-januari-2027-design",
+  "private": true,
+  "type": "module",
+  "scripts": { "render": "node render.mjs" },
+  "dependencies": { "@resvg/resvg-js": "^2.6.2" }
+}
