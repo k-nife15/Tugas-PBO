@@ -2,8 +2,7 @@
 """Ekspor PDF siap cetak dari PNG master (4x untuk kanvas kecil, 2x untuk kanvas besar).
 
 Ukuran fisik diturunkan dari kanvas desain:
-  kalender-januari-2027-*  -> 794 px  = 210 mm (A5 landscape)
-  kalender-2027-*          -> 2130 px = 213 mm (21,3 x 15,2 cm)
+  kalender-2027-*  ->  2130 px = 213 mm (21,3 x 15,2 cm)
 """
 from pathlib import Path
 
@@ -14,7 +13,6 @@ DIST = ROOT / "dist"
 
 # prefix nama file -> (lebar kanvas px, lebar fisik mm)
 SIZES = {
-    "kalender-januari-2027": (794, 210.0),
     "kalender-2027": (2130, 213.0),
 }
 

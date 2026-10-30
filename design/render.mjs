@@ -29,7 +29,7 @@ for (const file of svgs) {
     const resvg = new Resvg(svg, {
       fitTo: { mode: 'zoom', value: scale },
       background: '#FFFFFF',
-      font: { fontFiles, loadSystemFonts: false, defaultFontFamily: 'Poppins' },
+      font: { fontFiles, loadSystemFonts: false, defaultFontFamily: 'Lato' },
     });
     const png = resvg.render();
     const name = scale === 1 ? `${base}.png` : `${base}@${scale}x.png`;
