@@ -21,7 +21,11 @@ if (!svgs.length) {
 for (const file of svgs) {
   const base = file.replace(/\.svg$/, '');
   const svg = fs.readFileSync(path.join(DIST, file));
-  for (const scale of [1, 2, 4]) {
+  // Skala adaptif: kanvas besar (mis. 2130px) cukup 1x/2x; kanvas kecil 1x/2x/4x.
+  const probe = new Resvg(svg, { font: { fontFiles, loadSystemFonts: false } });
+  const wide = probe.width >= 1500;
+  const scales = wide ? [1, 2] : [1, 2, 4];
+  for (const scale of scales) {
     const resvg = new Resvg(svg, {
       fitTo: { mode: 'zoom', value: scale },
       background: '#FFFFFF',

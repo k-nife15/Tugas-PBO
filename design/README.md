@@ -8,6 +8,31 @@ versi flat, bukan yang *curved*.
 |---|---|---|
 | **Playful & Rapi** | pastel, sticker miring, doodle, warna ceria | `kalender-januari-2027-playful.svg` |
 | **Elegan · Islami · Business** | serif Marcellus, antique gold, panel mihrab, khatim 8 sudut, tabel garis rambut | `kalender-januari-2027-elegan.svg` |
+| **Biru–Hijau–Emas · 3 Penanggalan** | 21,3 × 15,2 cm, slot foto promo, Masehi + Hijriah + Jawa per sel | `kalender-2027-biru-hijau-emas.svg` |
+
+## Varian 3 — Biru–Hijau–Emas (ukuran cetak 21,3 × 15,2 cm)
+
+Kanvas **2130 × 1520 px @ 10 px/mm = 21,3 × 15,2 cm** (254 dpi), landscape.
+
+| Isi | Detail |
+|---|---|
+| **Slot foto promo** | bingkai emas ganda 750×454 px (≈ 7,5 × 4,5 cm) + kurung sudut + ribbon "PROGRAM UMROH 2027" + fade navy agar teks terbaca |
+| **Kalender 3 lapis** | angka besar = **Masehi**; `H 22 Rajab` = **Hijriah**; `J 22 Rejeb · Pon` = **Jawa + pasaran** |
+| **Kepala bulan** | "JANUARI" (Marcellus) + badge emas **2027** + `RAJAB – SYA'BAN 1448 H` · `REJEB – RUWAH 1960 DAL` + medali "01 BULAN" |
+| **Palet** | navy `#0B2E4F`, biru `#12557F`, hijau `#0D6B4F`, emas `#B58A2B` / `#D4AF37`, kertas krem `#FAF7F0` |
+| **Penghias (ramai tapi rapi)** | pita gradasi biru→hijau di tepi atas & kepala tiap kartu, bingkai ganda emas, khatim di 4 sudut, watermark khatim di belakang judul, garis emas + permata, chip hari berwarna, zebra baris, tint sel libur/puasa, penanda khatim/permata, legenda M–H–J, 3 kartu catatan beraksen, footer legal + kontak |
+
+**Ganti / kosongkan foto:** taruh berkas di `assets/foto-promo.png`. Untuk versi
+tanpa foto (slot kosong bergaris putus-putus + label "FOTO PROMOSI"), set
+`PHOTO_PLACEHOLDER = True` di `generate_tiga_kalender.py` — nama berkas keluarannya
+menjadi `kalender-2027-biru-hijau-emas-placeholder.*`.
+
+**Catatan akurasi Jawa:** penomoran hari Jawa di sini = Hijriah (hisab), bulan Jawa
+memakai padanan Sultan Agung (Rajab→Rejeb, Sya'ban→Ruwah), tahun Jawa = Hijriah + 512
+(1448 H → 1960), dan nama tahun dari windu 8 tahunan (`1960 = Dal`). Kalender Jawa
+Sultan Agung resmi bisa berselisih ±1 hari pada tahun-tahun tertentu; jika perlu
+presisi rukyat, sesuaikan tabel di `generate_tiga_kalender.py`.
+
 
 ## Output (`dist/`)
 
@@ -16,7 +41,7 @@ versi flat, bukan yang *curved*.
 | `*-playful.svg` / `*-elegan.svg` | **Master vektor**. Drag & drop ke Figma → jadi layer editable |
 | `*@2x.png` | 1588×1118 — preview layar |
 | `*@4x.png` | 3176×2236 — 384 dpi |
-| `*-A5.pdf` | Siap cetak, 210×148 mm (A5 landscape) |
+| `*-print.pdf` | Siap cetak (A5 210×148 mm untuk varian 1–2, 213×152 mm untuk varian 3) |
 | `*-data.json` | Data 42 sel (tanggal, Hijriah, pasaran) untuk verifikasi |
 
 Kanvas 794×559 px = **A5 landscape @96 dpi**.
@@ -27,10 +52,11 @@ Kanvas 794×559 px = **A5 landscape @96 dpi**.
 cd design
 python3 -m pip install --user --trusted-host pypi.org --trusted-host files.pythonhosted.org pillow
 npm install                 # @resvg/resvg-js (renderer SVG, tanpa browser)
-python3 generate.py         # varian playful  -> SVG + JSON
-python3 generate_elegant.py # varian elegan   -> SVG + JSON
-node render.mjs             # semua SVG -> PNG 1x/2x/4x
-python3 export_pdf.py       # semua PNG 4x -> PDF A5
+python3 generate.py                # playful        -> SVG + JSON
+python3 generate_elegant.py        # elegan         -> SVG + JSON
+python3 generate_tiga_kalender.py  # 3 penanggalan  -> SVG + JSON
+node render.mjs                    # semua SVG -> PNG (1x/2x, +4x utk kanvas kecil)
+python3 export_pdf.py              # PNG master -> PDF ukuran fisik asli
 ```
 
 `common.py` adalah satu-satunya sumber untuk **data tanggal** (Hijriah + pasaran),
