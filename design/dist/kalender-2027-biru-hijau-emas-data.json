@@ -1,6 +1,6 @@
 {
-  "title": "Kalender Meja Januari 2027 - 3 penanggalan",
-  "variant": "biru-hijau-emas",
+  "title": "Kalender Meja Januari 2027 - corporate elegant",
+  "variant": "corporate-elegant",
   "size_cm": [
     21.3,
     15.2
@@ -10,23 +10,24 @@
     1520
   ],
   "px_per_mm": 10,
-  "dpi_effective": 254,
   "calendars": [
     "Masehi",
-    "Hijriah 1448 H",
-    "Jawa 1960 Dal (pasaran)"
+    "Hijriah 1448 H (Arab)",
+    "Jawa 1960 Dal"
   ],
   "palette": {
+    "white": "#FFFFFF",
     "navy": "#0B2E4F",
     "blue": "#12557F",
     "green": "#0D6B4F",
     "gold": "#B58A2B",
     "gold_bright": "#D4AF37",
-    "paper": "#FAF7F0"
+    "hairline": "#E3E7EE"
   },
   "fonts": {
     "display": "Marcellus",
-    "body": "Lato"
+    "body": "Lato",
+    "arabic": "Noto Naskh Arabic"
   },
   "cells": [
     {

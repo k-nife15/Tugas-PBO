@@ -1,8 +1,11 @@
-# Kalender Meja Januari 2027 — 21,3 × 15,2 cm (3 penanggalan)
+# Kalender Meja Januari 2027 — Corporate Elegant (21,3 × 15,2 cm)
 
-Kalender meja **BPRS Mitra Mentari Sejahtera**, landscape, dengan tiga sistem
-penanggalan dalam setiap sel (**Masehi · Hijriah · Jawa**), slot foto promosi,
-dan palet **biru–hijau–emas**.
+Kalender meja **BPRS Mitra Mentari Sejahtera**, landscape, **dasar putih bersih**,
+dengan tiga sistem penanggalan dalam setiap sel (**Masehi · Hijriah · Jawa**),
+slot foto promosi, dan aksen **biru – hijau — emas** yang dipakai terkendali.
+
+Konsep: **corporate elegant** — rapi, tegas, dan lapang. Struktur dibentuk oleh
+blok warna, garis rambut, dan label small-caps (bukan ornamen ramai).
 
 Desain ini diturunkan dari frame `Kalender-Meja-Januari-2027` (node `84:2`) di file
 Figma [`PDF`](https://www.figma.com/design/QsOPwexICYv6i00y39KIce/PDF?node-id=0-1),
@@ -24,11 +27,12 @@ lalu digambar ulang penuh (bukan sekadar skala dari desain lama).
 | Ukuran jadi | **21,3 × 15,2 cm** (landscape) |
 | Kanvas | 2130 × 1520 px @ **10 px/mm** (254 dpi) |
 | Font | Marcellus (judul), Lato (teks & angka), Noto Naskh Arabic (teks Arab) |
-| Warna | navy `#0B2E4F`, biru `#12557F`, hijau `#0D6B4F`, emas `#B58A2B` / `#D4AF37`, krem `#FAF7F0` |
+| Warna | dasar **putih `#FFFFFF`**; navy `#0B2E4F`, biru `#12557F`, hijau `#0D6B4F`, emas `#B58A2B` / `#D4AF37`, garis rambut `#E3E7EE` |
 | Slot foto | 7,5 × 4,5 cm — bingkai gradasi biru→hijau + garis emas ganda, kurung sudut, ribbon "PROGRAM UMROH 2027" |
 | Kalender | angka besar = Masehi · **٢٢ رجب** = Hijriah · `J 22 Rejeb · Pon` = Jawa + pasaran |
 | Nama hari | dwibahasa: `AHAD` + **الأحد** … `SABTU` + **السبت** |
-| Ornamen | khatim 8 sudut (bingkai, latar, medali), pita gradasi biru→hijau, garis emas + permata, medali nomor bulan |
+| Struktur | blok judul navy + garis emas, pita tiga warna biru–hijau–emas di kepala halaman, tabel bergaris rambut, kepala tabel biru muda, baris zebra |
+| Ornamen | watermark khatim halus di blok navy, kurung sudut emas pada foto, tanda sudut (crop-mark), garis emas atas/bawah tabel, permata pemisah, bilah warna pada kartu catatan |
 
 ## Cara regenerate
 
