@@ -11,6 +11,7 @@ Output: dist/kalender-2027-biru-hijau-emas.*
 """
 import base64
 import json
+import math
 
 from arabic import MONTHS_AR, WEEKDAYS_AR, ar_digits, ar_text, ar_width
 from common import (ASSETS, CELLS, DIST, WEEKDAYS, diamond, line, rrect, star8,
@@ -119,6 +120,88 @@ def photo_uri():
 
 
 # ----------------------------------------------------------------------------
+# 0. ORNAMEN (arabesque geometris: busur, khatim, permata, daun)
+# ----------------------------------------------------------------------------
+def arc(cx, cy, r, sx, sy, color, sw=1.4, opacity=0.9):
+    """Busur seperempat lingkaran yang menghadap titik sudut (cx, cy)."""
+    sweep = 0 if sx * sy > 0 else 1
+    return (f'<path d="M {cx + sx * r:.2f} {cy:.2f} A {r} {r} 0 0 {sweep} '
+            f'{cx:.2f} {cy + sy * r:.2f}" fill="none" stroke="{color}" '
+            f'stroke-width="{sw}" opacity="{opacity}"/>')
+
+
+def leaf(x, y, scale, angle, color, opacity=0.45):
+    """Daun kecil (lens) untuk hiasan arabesque."""
+    return (f'<g transform="translate({x:.2f} {y:.2f}) rotate({angle}) '
+            f'scale({scale})">'
+            f'<path d="M0 0 C 5 -4.6 13 -4.6 18 0 C 13 4.6 5 4.6 0 0 Z" '
+            f'fill="{color}" opacity="{opacity}"/></g>')
+
+
+def arabesque_corner(cx, cy, size, sx, sy, color=GOLD, sw=1.4, opacity=0.9,
+                     leaves=True):
+    """Ornamen sudut: dua busur sejajar + khatim + curl + daun."""
+    r = size
+    off, curl = r * 0.19, r * 0.085
+    p = [arc(cx, cy, r, sx, sy, color, sw, opacity),
+         arc(cx, cy, r - off, sx, sy, color, sw * 0.7, opacity * 0.65)]
+    # curl di ujung busur
+    p.append(f'<circle cx="{cx + sx * r:.2f}" cy="{cy:.2f}" r="{curl:.2f}" '
+             f'fill="none" stroke="{color}" stroke-width="{sw * 0.8}" '
+             f'opacity="{opacity}"/>')
+    p.append(f'<circle cx="{cx:.2f}" cy="{cy + sy * r:.2f}" r="{curl:.2f}" '
+             f'fill="none" stroke="{color}" stroke-width="{sw * 0.8}" '
+             f'opacity="{opacity}"/>')
+    # khatim kecil di titik terdekat sudut
+    k = r - r * 0.7071
+    p.append(star8(cx + sx * k, cy + sy * k, max(4.0, size * 0.15), stroke=color,
+                   sw=sw * 0.85, opacity=opacity))
+    if leaves and size > 44:
+        ccx, ccy = cx + sx * r, cy + sy * r
+        for deg in (196, 232, 268):
+            th = math.radians(deg)
+            px, py = ccx + r * math.cos(th), ccy + r * math.sin(th)
+            if (px - cx) * sx < r * 0.2 or (py - cy) * sy < r * 0.2:
+                continue
+            p.append(leaf(px, py, size / 60, deg + 90, color, 0.4))
+    return "".join(p)
+
+
+def flourish(cx, y, half, color=GOLD, sw=1.3):
+    """Pembatas horizontal: garis + dua curl + permata tengah."""
+    p = [line(cx - half, y, cx - 30, y, color, sw, opacity=0.75),
+         line(cx + 30, y, cx + half, y, color, sw, opacity=0.75),
+         diamond(cx, y, 8, color)]
+    for s in (-1, 1):
+        p.append(f'<path d="M {cx + s * 30:.2f} {y:.2f} c {s * 9} 0 {s * 11} -7 '
+                 f'{s * 4} -10 c {-s * 6} -2 {-s * 8} 4 {-s * 3} 6" fill="none" '
+                 f'stroke="{color}" stroke-width="{sw}" opacity="0.8"/>')
+    return "".join(p)
+
+
+def pattern_band(x, y, w, color, step=36, r=7.5, opacity=0.45, sw=1.1):
+    """Deret khatim kecil sebagai pita hias."""
+    n = int(w // step)
+    return "".join(star8(x + i * step, y, r, stroke=color, sw=sw, opacity=opacity)
+                   for i in range(n + 1))
+
+
+def vertical_ornament(x, y1, y2, color=GOLD):
+    """Pembatas vertikal antar kolom: garis + permata + medali khatim."""
+    p = [line(x, y1 + 12, x, y2 - 12, color, 1.1, opacity=0.5)]
+    for yy in (y1, y2):
+        p.append(diamond(x, yy, 7, color))
+        p.append(diamond(x, yy + (14 if yy == y1 else -14), 3.5, color))
+    mid = (y1 + y2) / 2
+    p.append(star8(x, mid, 15, stroke=color, sw=1.1, opacity=0.85))
+    p.append(star8(x, mid, 7, fill=color, opacity=0.5))
+    for f in (0.25, 0.75):
+        p.append(star8(x, y1 + (y2 - y1) * f, 10, stroke=color, sw=0.9,
+                       opacity=0.6))
+    return "".join(p)
+
+
+# ----------------------------------------------------------------------------
 # 1. LATAR & KEPALA
 # ----------------------------------------------------------------------------
 def defs():
@@ -144,11 +227,19 @@ def defs():
 def background():
     p = [rrect(0, 0, W, H, 0, WHITE)]
     # (latar dibiarkan bersih: corporate elegant)
-    # tanda sudut (crop-mark style)
-    for sx, sy, cx, cy in [(1, 1, 22, 22), (-1, 1, W - 22, 22),
-                           (1, -1, 22, H - 22), (-1, -1, W - 22, H - 22)]:
-        p.append(f'<path d="M {cx} {cy + sy * 34} L {cx} {cy} L {cx + sx * 34} {cy}" '
-                 f'fill="none" stroke="{GOLD}" stroke-width="2.4" opacity="0.75"/>')
+    # bingkai ganda tipis (elegant, bukan kaku)
+    p.append(rrect(14, 14, W - 28, H - 28, 0, "none", GOLD, 1.6,
+                   ' opacity="0.85"'))
+    p.append(rrect(21, 21, W - 42, H - 42, 0, "none", BLUE, 0.8,
+                   ' opacity="0.4"'))
+    # arabesque di 4 sudut bingkai
+    for sx, sy, cx, cy in [(1, 1, 14, 14), (-1, 1, W - 14, 14),
+                           (1, -1, 14, H - 14), (-1, -1, W - 14, H - 14)]:
+        p.append(arabesque_corner(cx, cy, 48, sx, sy, GOLD, 1.5, 0.8))
+    # permata di tengah tiap sisi bingkai
+    for gx, gy in [(W / 2, 14), (W / 2, H - 14), (14, H / 2), (W - 14, H / 2)]:
+        p.append(diamond(gx, gy, 9, GOLD))
+        p.append(diamond(gx, gy, 4, WHITE))
     return "".join(p)
 
 
@@ -169,6 +260,8 @@ def header():
     p.append(rrect(M, y, w1, hh, 0, BLUE))
     p.append(rrect(M + w1, y, w2, hh, 0, GREEN))
     p.append(rrect(M + w1 + w2, y, span - w1 - w2, hh, 0, "url(#goldGrad)"))
+    p.append(diamond(M - 12, y + hh / 2, 8, GOLD))
+    p.append(diamond(W - M + 12, y + hh / 2, 8, GOLD))
     p.append(line(M, y + hh + 6, W - M, y + hh + 6, HAIR, 1.4))
     return "".join(p)
 
@@ -203,6 +296,18 @@ def photo_panel():
                  f'fill="none" stroke="{GOLD_BRIGHT}" stroke-width="3" '
                  f'opacity="0.9"/>')
 
+    # arabesque kecil di 4 sudut dalam foto
+    for sx, sy, cx, cy in [(1, 1, LX, TOP), (-1, 1, LX + LW, TOP),
+                           (1, -1, LX, TOP + PHOTO_H),
+                           (-1, -1, LX + LW, TOP + PHOTO_H)]:
+        p.append(arabesque_corner(cx, cy, 46, sx, sy, GOLD_BRIGHT, 1.4, 0.62))
+    # medali khatim di tengah sisi atas (memecah garis bingkai)
+    mx, my = LX + LW / 2, TOP
+    p.append(f'<circle cx="{mx}" cy="{my}" r="26" fill="{WHITE}" '
+             f'stroke="{GOLD}" stroke-width="1.6"/>')
+    p.append(star8(mx, my, 17, stroke=GOLD, sw=1.3, opacity=0.95))
+    p.append(diamond(mx, my, 5.5, GOLD))
+
     # strip judul promo (blok navy)
     cy = TOP + PHOTO_H - 60
     p.append(f'<rect x="{LX}" y="{cy}" width="{LW}" height="60" fill="{NAVY}" '
@@ -212,6 +317,7 @@ def photo_panel():
     p.append(text(LX + 56, cy + 40, CAPTION, 21, 800, WHITE, ls=6, family=F_BODY))
     p.append(text(LX + LW - 28, cy + 39, "1448 H  \u00b7  1960 Dal", 17, 400,
                   GOLD_SOFT, anchor="end", ls=1.6, family=F_BODY))
+    p.append(pattern_band(LX + 20, cy + 50, LW - 40, GOLD_BRIGHT, 46, 4.6, 0.3, 0.8))
     return "".join(p)
 
 
@@ -272,6 +378,12 @@ def calendar_panel():
                    sw=1.6, opacity=0.07))
     p.append(star8(RX + RW - 250, TOP + HEAD_H / 2, 96, stroke=GOLD_BRIGHT,
                    sw=1.2, opacity=0.10))
+    # pita khatim halus di dasar blok navy
+    p.append(pattern_band(RX + 44, TOP + HEAD_H - 26, RW - 88, GOLD_BRIGHT,
+                          40, 6.5, 0.22, 1.0))
+    # arabesque emas di dua sudut atas blok navy
+    for sx, cx in [(1, RX), (-1, RX + RW)]:
+        p.append(arabesque_corner(cx, TOP, 42, sx, 1, GOLD_BRIGHT, 1.3, 0.42))
     p.append(rrect(RX, TOP + HEAD_H - 4, RW, 4, 0, "url(#goldGrad)"))
     p.append(text(RX + CARD_PAD - 4, TOP + 132, "JANUARI", 78, 400, WHITE, ls=6,
                   family=F_TITLE))
@@ -330,6 +442,10 @@ def calendar_panel():
         p.append(line(IX, GRID_TOP + r * ROW_H, IX + IW, GRID_TOP + r * ROW_H,
                       HAIR, 1))
     p.append(line(IX, GRID_TOP, IX + IW, GRID_TOP, GOLD, 1.6))
+    p.append(line(IX, GRID_BOT, IX + IW, GRID_BOT, GOLD, 1.6))
+    # arabesque di sudut bawah kartu
+    for sx, cx in [(1, RX), (-1, RX + RW)]:
+        p.append(arabesque_corner(cx, BOT, 44, sx, -1, GOLD, 1.35, 0.6))
 
     # ---- isi sel
     for c in CELLS:
@@ -391,12 +507,16 @@ def notes_and_footer():
         x = M + i * (cw + 24)
         p.append(rrect(x, ny, cw, nh, 0, WHITE, HAIR, 1.4))
         p.append(rrect(x, ny, cw, 4, 0, color))
+        p.append(diamond(x + 13, ny + 17, 5, color))
+        p.append(diamond(x + cw - 13, ny + 17, 5, color))
         p.append(text(x + 26, ny + 31, day, 21, 800, color, family=F_BODY))
         p.append(text(x + 26, ny + 56, label,
                       fit(label, 18, 400, cw - 52, family=F_BODY, min_size=14),
                       400, MUTED, family=F_BODY))
 
-    p.append(line(M, 1450, W - M, 1450, HAIR, 1.4))
+    p.append(line(M, 1450, W / 2 - 150, 1450, HAIR, 1.4))
+    p.append(line(W / 2 + 150, 1450, W - M, 1450, HAIR, 1.4))
+    p.append(flourish(W / 2, 1450, 140, GOLD, 1.3))
     p.append(text(M, 1484, OJK, 16, 400, MUTED, family=F_BODY))
     p.append(text(W - M, 1484, CONTACT, 17, 700, NAVY, anchor="end",
                   family=F_BODY))
@@ -407,8 +527,9 @@ def notes_and_footer():
 # 5. ASSEMBLY
 # ----------------------------------------------------------------------------
 def build_svg():
+    gutter = vertical_ornament((LX + LW + RX) / 2, TOP, BOT)
     body = "".join([background(), header(), photo_panel(), promo_panel(),
-                    calendar_panel(), notes_and_footer()])
+                    calendar_panel(), notes_and_footer(), gutter])
     return (f'<svg xmlns="http://www.w3.org/2000/svg" '
             f'xmlns:xlink="http://www.w3.org/1999/xlink" '
             f'width="{W}" height="{H}" viewBox="0 0 {W} {H}">'

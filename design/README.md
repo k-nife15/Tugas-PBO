@@ -32,7 +32,7 @@ lalu digambar ulang penuh (bukan sekadar skala dari desain lama).
 | Kalender | angka besar = Masehi · **٢٢ رجب** = Hijriah · `J 22 Rejeb · Pon` = Jawa + pasaran |
 | Nama hari | dwibahasa: `AHAD` + **الأحد** … `SABTU` + **السبت** |
 | Struktur | blok judul navy + garis emas, pita tiga warna biru–hijau–emas di kepala halaman, tabel bergaris rambut, kepala tabel biru muda, baris zebra |
-| Ornamen | watermark khatim halus di blok navy, kurung sudut emas pada foto, tanda sudut (crop-mark), garis emas atas/bawah tabel, permata pemisah, bilah warna pada kartu catatan |
+| Ornamen (arabesque) | bingkai halaman + **arabesque sudut** (busur ganda, khatim, curl, daun), **medali khatim** di tengah atas foto, pita khatim pada strip foto & dasar blok navy, **pembatas vertikal bermedali** di antara kolom, pembatas flourish di kaki halaman, permata pada kartu catatan, watermark khatim di blok navy |
 
 ## Cara regenerate
 
