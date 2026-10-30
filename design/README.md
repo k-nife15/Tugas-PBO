@@ -8,7 +8,7 @@ versi flat, bukan yang *curved*.
 |---|---|---|
 | **Playful & Rapi** | pastel, sticker miring, doodle, warna ceria | `kalender-januari-2027-playful.svg` |
 | **Elegan · Islami · Business** | serif Marcellus, antique gold, panel mihrab, khatim 8 sudut, tabel garis rambut | `kalender-januari-2027-elegan.svg` |
-| **Biru–Hijau–Emas · 3 Penanggalan** | 21,3 × 15,2 cm, slot foto promo, Masehi + Hijriah + Jawa per sel | `kalender-2027-biru-hijau-emas.svg` |
+| **Biru–Hijau–Emas · 3 Penanggalan** | 21,3 × 15,2 cm, slot foto promo, Masehi + Hijriah (angka & nama hari Arab) + Jawa per sel | `kalender-2027-biru-hijau-emas.svg` |
 
 ## Varian 3 — Biru–Hijau–Emas (ukuran cetak 21,3 × 15,2 cm)
 
@@ -16,11 +16,26 @@ Kanvas **2130 × 1520 px @ 10 px/mm = 21,3 × 15,2 cm** (254 dpi), landscape.
 
 | Isi | Detail |
 |---|---|
-| **Slot foto promo** | bingkai emas ganda 750×454 px (≈ 7,5 × 4,5 cm) + kurung sudut + ribbon "PROGRAM UMROH 2027" + fade navy agar teks terbaca |
-| **Kalender 3 lapis** | angka besar = **Masehi**; `H 22 Rajab` = **Hijriah**; `J 22 Rejeb · Pon` = **Jawa + pasaran** |
-| **Kepala bulan** | "JANUARI" (Marcellus) + badge emas **2027** + `RAJAB – SYA'BAN 1448 H` · `REJEB – RUWAH 1960 DAL` + medali "01 BULAN" |
-| **Palet** | navy `#0B2E4F`, biru `#12557F`, hijau `#0D6B4F`, emas `#B58A2B` / `#D4AF37`, kertas krem `#FAF7F0` |
-| **Penghias (ramai tapi rapi)** | pita gradasi biru→hijau di tepi atas & kepala tiap kartu, bingkai ganda emas, khatim di 4 sudut, watermark khatim di belakang judul, garis emas + permata, chip hari berwarna, zebra baris, tint sel libur/puasa, penanda khatim/permata, legenda M–H–J, 3 kartu catatan beraksen, footer legal + kontak |
+| **Slot foto promo** | bingkai **gradasi biru→hijau** + garis emas ganda, 7,5 × 4,5 cm, kurung sudut, ribbon "PROGRAM UMROH 2027", fade navy agar teks terbaca |
+| **Kalender 3 lapis** | angka besar = **Masehi**; **٢٢ رجب** = **Hijriah** (angka Arab-Indik + bulan Arab); `J 22 Rejeb · Pon` = **Jawa + pasaran** |
+| **Nama hari** | dua bahasa di header: `AHAD` + **الأحد** (dst. sampai السبت) |
+| **Kepala bulan** | "JANUARI" (Marcellus) + badge emas 2027 + `RAJAB – SYA'BAN 1448 H` · `REJEB – RUWAH 1960 DAL` + **رجب – شعبان ١٤٤٨ ه** + medali "01" |
+| **Palet** | navy `#0B2E4F`, biru `#12557F`, hijau `#0D6B4F`, emas `#B58A2B`/`#D4AF37`, krem `#FAF7F0` |
+| **Biru & hijau sebagai ornamen** | bingkai foto gradasi, pita vertikal hijau di kartu promo, watermark khatim biru/hijau di latar, medali bulan bergradasi biru, medali khatim berwarna di kartu catatan, pita gradasi di kepala kartu |
+
+### Teks Arab = path vektor (penting)
+
+Renderer yang dipakai (`resvg`) tidak melakukan shaping kompleks, sehingga teks Arab
+biasa akan tampil terpisah dan urutannya salah. Karena itu semua teks Arab di varian ini
+di-**shape dengan HarfBuzz** (modul `arabic.py`: `uharfbuzz` + `fontTools`) lalu
+dikonversi menjadi `<path>`:
+
+- Huruf tersambung sesuai kaidah (initial/median/final), harakat menempel benar.
+- Angka Arab-Indik tetap **LTR** di dalam kalimat RTL (angka di kanan, bulan di kiri).
+- Font: **Noto Naskh Arabic**.
+- Konsekuensi: di Figma teks Arab ini menjadi vektor (tidak bisa diketik ulang).
+  Jika ingin teks Arab yang *editable* di Figma, ketik/paste langsung di Figma
+  (Figma punya shaper Arab sendiri) atau minta saya keluarkan versi teks+placeholder.
 
 **Ganti / kosongkan foto:** taruh berkas di `assets/foto-promo.png`. Untuk versi
 tanpa foto (slot kosong bergaris putus-putus + label "FOTO PROMOSI"), set

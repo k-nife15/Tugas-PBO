@@ -12,6 +12,7 @@ Output: dist/kalender-2027-biru-hijau-emas.*
 import base64
 import json
 
+from arabic import MONTHS_AR, WEEKDAYS_AR, ar_digits, ar_text, ar_width
 from common import (ASSETS, CELLS, DIST, WEEKDAYS, diamond, line, rrect, star8,
                     text, tw, wrap)
 
@@ -130,6 +131,13 @@ def defs():
     <stop offset="0" stop-color="{NAVY}"/><stop offset="0.55" stop-color="{BLUE}"/>
     <stop offset="1" stop-color="{GREEN}"/>
   </linearGradient>
+  <linearGradient id="blueGrad" x1="0" y1="0" x2="0.4" y2="1">
+    <stop offset="0" stop-color="#1D7396"/><stop offset="0.55" stop-color="{BLUE}"/>
+    <stop offset="1" stop-color="{NAVY}"/>
+  </linearGradient>
+  <linearGradient id="greenGrad" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#16906B"/><stop offset="1" stop-color="{GREEN}"/>
+  </linearGradient>
   <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
     <stop offset="0" stop-color="#E3C56B"/><stop offset="0.5" stop-color="{GOLD_BRIGHT}"/>
     <stop offset="1" stop-color="#A97F22"/>
@@ -176,6 +184,11 @@ def background():
                    "none", GOLD, 1.6))
     p.append(rrect(FRAME_IN, FRAME_IN, W - 2 * FRAME_IN, H - 2 * FRAME_IN, 0,
                    "none", GOLD_BRIGHT, 0.8))
+    # ornamen besar: khatim biru & hijau sebagai hiasan latar
+    p.append(star8(120, 1330, 250, stroke=BLUE, sw=2.5, opacity=0.055))
+    p.append(star8(2020, 260, 230, stroke=GREEN, sw=2.5, opacity=0.055))
+    p.append(star8(120, 1330, 165, stroke=GREEN, sw=1.6, opacity=0.05))
+    p.append(star8(2020, 260, 150, stroke=BLUE, sw=1.6, opacity=0.045))
     for cx, cy in [(FRAME_IN + 22, FRAME_IN + 22), (W - FRAME_IN - 22, FRAME_IN + 22),
                    (FRAME_IN + 22, H - FRAME_IN - 22),
                    (W - FRAME_IN - 22, H - FRAME_IN - 22)]:
@@ -203,8 +216,10 @@ def header():
 # ----------------------------------------------------------------------------
 def photo_panel():
     ph = 454
-    p = [rrect(LX, TOP, LW, ph, 10, PANEL, GOLD, 3, ' filter="url(#soft)"')]
-    p.append(rrect(LX + 8, TOP + 8, LW - 16, ph - 16, 7, "none", GOLD_BRIGHT, 1))
+    p = [rrect(LX, TOP, LW, ph, 10, PANEL, "url(#bgGrad)", 7,
+               ' filter="url(#soft)"')]
+    p.append(rrect(LX + 9, TOP + 9, LW - 18, ph - 18, 7, "none", GOLD, 2))
+    p.append(rrect(LX + 13, TOP + 13, LW - 26, ph - 26, 6, "none", GOLD_BRIGHT, 0.8))
 
     if PHOTO_PLACEHOLDER:
         p.append(rrect(LX + 14, TOP + 14, LW - 28, ph - 28, 6, GOLD_SOFT,
@@ -247,6 +262,8 @@ def promo_panel():
     p = [rrect(LX, cy, LW, BOT - cy, 10, PANEL, LINE, 1.4,
                ' filter="url(#soft)"')]
     p.append(rrect(LX, cy, LW, 8, 4, "url(#bgGrad)"))
+    p.append(rrect(LX, cy + 10, 10, BOT - cy - 10, 0, "url(#greenGrad)"))
+    p.append(star8(LX + 520, 760, 120, stroke=GREEN, sw=1.4, opacity=0.07))
     x = LX + 48
 
     p.append(text(x, 692, KICKER, 22, 800, GREEN, ls=7, family=F_BODY))
@@ -289,7 +306,7 @@ def promo_panel():
 # ----------------------------------------------------------------------------
 IX = RX + 44
 IW = RW - 88                      # 1182
-GRID_TOP = 448
+GRID_TOP = 468
 GRID_BOT = 1240
 ROW_H = (GRID_BOT - GRID_TOP) / 6  # 132
 COL_W = IW / 7                     # 168.86
@@ -314,11 +331,11 @@ def calendar_panel():
 
     # ---- medali nomor bulan
     mgx, mgy, mgr = 1996, 252, 46
-    p.append(f'<circle cx="{mgx}" cy="{mgy}" r="{mgr}" fill="{GOLD_SOFT}" '
-             f'stroke="{GOLD}" stroke-width="2.4"/>')
+    p.append(f'<circle cx="{mgx}" cy="{mgy}" r="{mgr}" fill="url(#blueGrad)" '
+             f'stroke="{GOLD}" stroke-width="2.8"/>')
     p.append(f'<circle cx="{mgx}" cy="{mgy}" r="{mgr - 8}" fill="none" '
              f'stroke="{GOLD_BRIGHT}" stroke-width="1.2"/>')
-    p.append(text(mgx, mgy + 14, "01", 40, 800, NAVY, anchor="middle", ls=2,
+    p.append(text(mgx, mgy + 14, "01", 40, 800, "#FFFFFF", anchor="middle", ls=2,
                   family=F_BODY))
     p.append(text(mgx, mgy + 78, "BULAN", 15, 700, GOLD, anchor="middle", ls=4,
                   family=F_BODY))
@@ -329,6 +346,10 @@ def calendar_panel():
     p.append(diamond(IX + hw + 34, 344, 7, GOLD))
     p.append(text(IX + hw + 58, 350, J_MONTH_LINE, 20, 700, GOLD, ls=4.5,
                   family=F_BODY))
+    ar_month, _ = ar_text(1928, 352,
+                          f"{MONTHS_AR['Rajab']} \u2013 {MONTHS_AR[chr(83)+chr(121)+chr(97)+chr(39)+chr(98)+chr(97)+chr(110)]} \u0661\u0664\u0664\u0668 \u0647",
+                          26, GOLD, anchor="end")
+    p.append(ar_month)
 
     # ---- header hari
     for i, name in enumerate(WEEKDAYS):
@@ -339,9 +360,12 @@ def calendar_panel():
             bg, fg = GREEN_SOFT, GREEN
         else:
             bg, fg = BLUE_SOFT, BLUE
-        p.append(rrect(x + 5, 380, COL_W - 10, 52, 10, bg))
-        p.append(text(x + COL_W / 2, 414, name.upper(), 20, 700, fg,
+        p.append(rrect(x + 5, 372, COL_W - 10, 84, 10, bg))
+        p.append(text(x + COL_W / 2, 404, name.upper(), 19, 700, fg,
                       anchor="middle", ls=3, family=F_BODY))
+        ar_day, _ = ar_text(x + COL_W / 2, 444, WEEKDAYS_AR[i], 32, fg,
+                            anchor="middle")
+        p.append(ar_day)
 
     # ---- zebra baris
     for r in range(6):
@@ -391,13 +415,15 @@ def calendar_panel():
 
         p.append(text(cx, y + 58, str(c["day"]), 40, 700, num_c, anchor="middle",
                       family=F_BODY))
-        h_txt = f"H  {c['hijri_day']} {c['hijri_month']}"
         j_txt = f"J  {c['jav_day']} {c['jav_month']} \u00b7 {c['pasaran']}"
-        h_fs = fit(h_txt, 19, 400, COL_W - 14, family=F_BODY, min_size=14)
-        j_fs = fit(j_txt, 18, 400, COL_W - 14, family=F_BODY, min_size=13)
-        p.append(text(cx, y + 92, h_txt, h_fs, 400, h_c, anchor="middle", ls=0.3,
-                      family=F_BODY))
-        p.append(text(cx, y + 116, j_txt, j_fs, 400, j_c, anchor="middle", ls=0.2,
+        j_fs = fit(j_txt, 17, 400, COL_W - 14, family=F_BODY, min_size=12)
+        ar_s = f"{ar_digits(c['hijri_day'])} {MONTHS_AR[c['hijri_month']]}"
+        h_size = 31
+        while ar_width(ar_s, h_size) > COL_W - 16 and h_size > 20:
+            h_size -= 1
+        h_frag, _ = ar_text(cx, y + 94, ar_s, h_size, h_c, anchor="middle")
+        p.append(h_frag)
+        p.append(text(cx, y + 118, j_txt, j_fs, 400, j_c, anchor="middle", ls=0.2,
                       family=F_BODY))
 
         if d in HOLIDAY_SET:
@@ -413,8 +439,8 @@ def calendar_panel():
         p.append(text(lx + 10, 1267, badge, 13, 800, "#FFFFFF", anchor="middle",
                       family=F_BODY))
         lx += 30
-    p.append(text(lx + 6, 1268, "Hijriah 1448 H  \u00b7  Jawa 1960 Dal  \u00b7  "
-                  "pasaran Jawa", 18, 400, MUTED, family=F_BODY))
+    p.append(text(lx + 6, 1268, "Hijriah 1448 H (angka Arab)  \u00b7  Jawa 1960 "
+                  "Dal  \u00b7  pasaran Jawa", 17, 400, MUTED, family=F_BODY))
 
 
     return "".join(p)
@@ -430,8 +456,10 @@ def notes_and_footer():
         p.append(rrect(x, NOTES_Y, cw, NOTES_H, 8, PANEL, LINE, 1.2,
                        ' filter="url(#soft)"'))
         p.append(rrect(x, NOTES_Y, 10, NOTES_H, 4, color))
-        p.append(text(x + 30, NOTES_Y + 26, day, 21, 800, color, family=F_BODY))
-        p.append(text(x + 30, NOTES_Y + 48, label, fit(label, 18, 400, cw - 46, family=F_BODY, min_size=14), 400, MUTED, family=F_BODY))
+        p.append(star8(x + 48, NOTES_Y + NOTES_H / 2, 17, fill=color))
+        p.append(star8(x + 48, NOTES_Y + NOTES_H / 2, 10, fill="#FFFFFF"))
+        p.append(text(x + 78, NOTES_Y + 26, day, 21, 800, color, family=F_BODY))
+        p.append(text(x + 78, NOTES_Y + 48, label, fit(label, 18, 400, cw - 46, family=F_BODY, min_size=14), 400, MUTED, family=F_BODY))
 
     p.append(line(M, FOOT_RULE, W - M, FOOT_RULE, "url(#goldRule)", 1.6))
     p.append(rrect(W / 2 - 26, FOOT_RULE - 6, 52, 12, 3, PAPER))
