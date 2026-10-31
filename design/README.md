@@ -36,8 +36,26 @@ lalu digambar ulang penuh (bukan sekadar skala dari desain lama).
 | Slot foto | 7,5 × 4,5 cm — bingkai gradasi biru→hijau + garis emas ganda, kurung sudut, ribbon "PROGRAM UMROH 2027" |
 | Kalender | angka besar = Masehi · **٢٢ رجب** = Hijriah · `J 22 Rejeb · Pon` = Jawa + pasaran |
 | Nama hari | dwibahasa: `AHAD` + **الأحد** … `SABTU` + **السبت** |
-| Struktur | blok judul navy + garis emas, pita tiga warna biru–hijau–emas di kepala halaman, tabel bergaris rambut, kepala tabel biru muda, baris zebra |
-| Ornamen (arabesque) | bingkai halaman + **arabesque sudut** (busur ganda, khatim, curl, daun), **medali khatim** di tengah atas foto, pita khatim pada strip foto & dasar blok navy, **pembatas vertikal bermedali** di antara kolom, pembatas flourish di kaki halaman, permata pada kartu catatan, watermark khatim di blok navy |
+| Struktur | blok judul navy + garis emas, pita tipis biru–hijau–emas di kepala halaman, tabel bergaris rambut, kepala tabel biru muda, baris zebra |
+| Aksen | garis emas 1,6 px di atas/bawah tabel, permata emas kecil, satu watermark khatim halus di blok navy |
+
+## Design system (dipakai di kedua halaman)
+
+Konsepnya **satu bahasa, sedikit ornamen** — bukan menumpuk hiasan:
+
+| Unsur | Aturan |
+|---|---|
+| Latar | putih bersih `#FFFFFF`, tanpa bingkai halaman |
+| Struktur | blok navy `#0B2E4F` hanya untuk kepala bulan & bar kontak |
+| Garis | hairline `#E3E7EE` 1 px untuk tabel; garis emas 1,6 px hanya untuk aksen |
+| Motif | **satu motif saja: khatim 8 sudut** — dipakai 1× per halaman sebagai watermark |
+| Warna | navy = struktur · emas = aksen/angka/tahun · hijau = hari Jum'at, libur, teks Arab Hijriah · biru = label & header tabel |
+| Tipografi | Marcellus (judul) · Lato (teks & angka) · Noto Naskh Arabic (Arab) |
+| Grid | margin 56 px, kolom 12 px gutter, skala spasi 8/16/24/32/56 |
+| Ritme | kepala (logo → pita → hairline) dan kaki (hairline → legal/kontak) identik di depan & belakang |
+
+Karena itu halaman depan (kalender) dan belakang (foto) terasa satu set meskipun
+kontennya berbeda.
 
 ## Cara regenerate
 
@@ -79,7 +97,7 @@ dirender sebagai `<text>`. Semua teks Arab di sini di-shape dengan **HarfBuzz**
 
 | Mode | Berkas | Konsep |
 |---|---|---|
-| **A. Foto penuh** (default) | `...-belakang.*` | Foto **full-bleed** menutupi seluruh halaman; judul, sub-judul, chip fitur, dan kontak **menumpuk di atas foto** dengan *scrim* navy agar tetap terbaca. Bingkai emas tipis + arabesque sudut + plat putih logo. |
+| **A. Foto penuh** (default) | `...-belakang.*` | Foto **full-bleed** menutupi seluruh halaman; judul, sub-judul, chip fitur, dan kontak **menumpuk di atas foto** dengan *scrim* navy agar tetap terbaca. Margin, tipografi, dan kaki halaman sama dengan halaman depan. |
 | **B. Profil & produk** (alternatif) | `...-belakang-profil.*` | Dasar putih dua kolom: profil + nilai perusahaan + daftar produk + bar kontak navy. |
 
 > Untuk cetak mode A, percetakan perlu **bleed 3 mm** (desain ini dibuat tepat 213 × 152 mm; minta printer menambahkan bleed dari gambar yang sama, atau saya siapkan versi bleed bila diperlukan).

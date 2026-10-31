@@ -238,44 +238,28 @@ def defs():
 
 
 def background():
-    p = [rrect(0, 0, W, H, 0, WHITE)]
-    # (latar dibiarkan bersih: corporate elegant)
-    # bingkai ganda tipis (elegant, bukan kaku)
-    p.append(rrect(14, 14, W - 28, H - 28, 0, "none", GOLD, 1.6,
-                   ' opacity="0.85"'))
-    p.append(rrect(21, 21, W - 42, H - 42, 0, "none", BLUE, 0.8,
-                   ' opacity="0.4"'))
-    # arabesque di 4 sudut bingkai
-    for sx, sy, cx, cy in [(1, 1, 14, 14), (-1, 1, W - 14, 14),
-                           (1, -1, 14, H - 14), (-1, -1, W - 14, H - 14)]:
-        p.append(arabesque_corner(cx, cy, 48, sx, sy, GOLD, 1.5, 0.8))
-    # permata di tengah tiap sisi bingkai
-    for gx, gy in [(W / 2, 14), (W / 2, H - 14), (14, H / 2), (W - 14, H / 2)]:
-        p.append(diamond(gx, gy, 9, GOLD))
-        p.append(diamond(gx, gy, 4, WHITE))
-    return "".join(p)
+    """Latar putih bersih. Ornamen sengaja ditiadakan agar konsep tidak ramai."""
+    return rrect(0, 0, W, H, 0, WHITE)
 
 
 def header():
-    p = [f'<image x="{M}" y="80" width="252" height="47.3" '
+    p = [f'<image x="{M}" y="76" width="244" height="45.8" '
          f'xlink:href="{logo_uri()}" preserveAspectRatio="xMinYMid meet"/>']
-    p.append(text(W - M, 112, BRAND, 22, 800, NAVY, anchor="end", ls=7,
+    p.append(text(W - M, 104, BRAND, 21, 800, NAVY, anchor="end", ls=6,
                   family=F_BODY))
-    p.append(text(W - M, 142, BRAND_TAG, 17, 400, MUTED, anchor="end", ls=2.4,
+    p.append(text(W - M, 130, BRAND_TAG, 16, 400, MUTED, anchor="end", ls=2,
                   family=F_BODY))
-    p.append(text(W / 2 + 40, 124, HEAD_TAG, 16, 700, GOLD, anchor="middle",
-                  ls=7, family=F_BODY))
+    p.append(text(W / 2 + 60, 112, HEAD_TAG, 14, 700, MUTED, anchor="middle",
+                  ls=6, family=F_BODY))
 
-    # pita tiga warna: biru - hijau - emas (struktur corporate)
-    y, hh = 176, 9
+    # satu pita tipis biru-hijau-emas: tanda tangan warna brand
+    y, hh = 168, 4
     span = W - 2 * M
-    w1, w2 = int(span * 0.46), int(span * 0.32)
+    w1, w2 = int(span * 0.44), int(span * 0.30)
     p.append(rrect(M, y, w1, hh, 0, BLUE))
     p.append(rrect(M + w1, y, w2, hh, 0, GREEN))
-    p.append(rrect(M + w1 + w2, y, span - w1 - w2, hh, 0, "url(#goldGrad)"))
-    p.append(diamond(M - 12, y + hh / 2, 8, GOLD))
-    p.append(diamond(W - M + 12, y + hh / 2, 8, GOLD))
-    p.append(line(M, y + hh + 6, W - M, y + hh + 6, HAIR, 1.4))
+    p.append(rrect(M + w1 + w2, y, span - w1 - w2, hh, 0, GOLD))
+    p.append(line(M, y + hh + 10, W - M, y + hh + 10, HAIR, 1.4))
     return "".join(p)
 
 
@@ -309,18 +293,6 @@ def photo_panel():
                  f'fill="none" stroke="{GOLD_BRIGHT}" stroke-width="3" '
                  f'opacity="0.9"/>')
 
-    # arabesque kecil di 4 sudut dalam foto
-    for sx, sy, cx, cy in [(1, 1, LX, TOP), (-1, 1, LX + LW, TOP),
-                           (1, -1, LX, TOP + PHOTO_H),
-                           (-1, -1, LX + LW, TOP + PHOTO_H)]:
-        p.append(arabesque_corner(cx, cy, 46, sx, sy, GOLD_BRIGHT, 1.4, 0.62))
-    # medali khatim di tengah sisi atas (memecah garis bingkai)
-    mx, my = LX + LW / 2, TOP
-    p.append(f'<circle cx="{mx}" cy="{my}" r="26" fill="{WHITE}" '
-             f'stroke="{GOLD}" stroke-width="1.6"/>')
-    p.append(star8(mx, my, 17, stroke=GOLD, sw=1.3, opacity=0.95))
-    p.append(diamond(mx, my, 5.5, GOLD))
-
     # strip judul promo (blok navy)
     cy = TOP + PHOTO_H - 60
     p.append(f'<rect x="{LX}" y="{cy}" width="{LW}" height="60" fill="{NAVY}" '
@@ -330,7 +302,6 @@ def photo_panel():
     p.append(text(LX + 56, cy + 40, CAPTION, 21, 800, WHITE, ls=6, family=F_BODY))
     p.append(text(LX + LW - 28, cy + 39, "1448 H  \u00b7  1960 Dal", 17, 400,
                   GOLD_SOFT, anchor="end", ls=1.6, family=F_BODY))
-    p.append(pattern_band(LX + 20, cy + 50, LW - 40, GOLD_BRIGHT, 46, 4.6, 0.3, 0.8))
     return "".join(p)
 
 
@@ -343,8 +314,8 @@ def promo_panel():
                   "\u00b7  " + EYEBROW_SUB, 17, 400, MUTED, family=F_BODY))
 
     # judul serif
-    p.append(text(LX - 2, 772, HEADLINE[0], 62, 400, NAVY, family=F_TITLE))
-    p.append(text(LX - 2, 838, HEADLINE[1], 62, 400, NAVY, family=F_TITLE))
+    p.append(text(LX, 772, HEADLINE[0], 62, 400, NAVY, family=F_TITLE))
+    p.append(text(LX, 838, HEADLINE[1], 62, 400, NAVY, family=F_TITLE))
     p.append(line(LX, 872, LX + LW, 872, HAIR, 1.4))
 
     for i, ln in enumerate(BODY):
@@ -352,7 +323,7 @@ def promo_panel():
 
     # harga
     p.append(text(LX, 1002, PRICE_LABEL, 15, 800, MUTED, ls=6, family=F_BODY))
-    p.append(text(LX - 2, 1066, PRICE_MAIN, 58, 700, GOLD, ls=1, family=F_BODY))
+    p.append(text(LX, 1066, PRICE_MAIN, 58, 700, GOLD, ls=1, family=F_BODY))
     pw = tw(PRICE_MAIN, 58, 700, 1, family=F_BODY)
     p.append(text(LX + pw + 10, 1064, PRICE_SUB, 21, 400, MUTED, family=F_BODY))
 
@@ -391,12 +362,6 @@ def calendar_panel():
                    sw=1.6, opacity=0.07))
     p.append(star8(RX + RW - 250, TOP + HEAD_H / 2, 96, stroke=GOLD_BRIGHT,
                    sw=1.2, opacity=0.10))
-    # pita khatim halus di dasar blok navy
-    p.append(pattern_band(RX + 44, TOP + HEAD_H - 26, RW - 88, GOLD_BRIGHT,
-                          40, 6.5, 0.22, 1.0))
-    # arabesque emas di dua sudut atas blok navy
-    for sx, cx in [(1, RX), (-1, RX + RW)]:
-        p.append(arabesque_corner(cx, TOP, 42, sx, 1, GOLD_BRIGHT, 1.3, 0.42))
     p.append(rrect(RX, TOP + HEAD_H - 4, RW, 4, 0, "url(#goldGrad)"))
     p.append(text(RX + CARD_PAD - 4, TOP + 132, "JANUARI", 78, 400, WHITE, ls=6,
                   family=F_TITLE))
@@ -456,9 +421,6 @@ def calendar_panel():
                       HAIR, 1))
     p.append(line(IX, GRID_TOP, IX + IW, GRID_TOP, GOLD, 1.6))
     p.append(line(IX, GRID_BOT, IX + IW, GRID_BOT, GOLD, 1.6))
-    # arabesque di sudut bawah kartu
-    for sx, cx in [(1, RX), (-1, RX + RW)]:
-        p.append(arabesque_corner(cx, BOT, 44, sx, -1, GOLD, 1.35, 0.6))
 
     # ---- isi sel
     for c in CELLS:
@@ -520,16 +482,12 @@ def notes_and_footer():
         x = M + i * (cw + 24)
         p.append(rrect(x, ny, cw, nh, 0, WHITE, HAIR, 1.4))
         p.append(rrect(x, ny, cw, 4, 0, color))
-        p.append(diamond(x + 13, ny + 17, 5, color))
-        p.append(diamond(x + cw - 13, ny + 17, 5, color))
         p.append(text(x + 26, ny + 31, day, 21, 800, color, family=F_BODY))
         p.append(text(x + 26, ny + 56, label,
                       fit(label, 18, 400, cw - 52, family=F_BODY, min_size=14),
                       400, MUTED, family=F_BODY))
 
-    p.append(line(M, 1450, W / 2 - 150, 1450, HAIR, 1.4))
-    p.append(line(W / 2 + 150, 1450, W - M, 1450, HAIR, 1.4))
-    p.append(flourish(W / 2, 1450, 140, GOLD, 1.3))
+    p.append(line(M, 1450, W - M, 1450, HAIR, 1.4))
     p.append(text(M, 1484, OJK, 16, 400, MUTED, family=F_BODY))
     p.append(text(W - M, 1484, CONTACT, 17, 700, NAVY, anchor="end",
                   family=F_BODY))
@@ -540,9 +498,8 @@ def notes_and_footer():
 # 5. ASSEMBLY
 # ----------------------------------------------------------------------------
 def build_svg():
-    gutter = vertical_ornament((LX + LW + RX) / 2, TOP, BOT)
     body = "".join([background(), header(), photo_panel(), promo_panel(),
-                    calendar_panel(), notes_and_footer(), gutter])
+                    calendar_panel(), notes_and_footer()])
     return (f'<svg xmlns="http://www.w3.org/2000/svg" '
             f'xmlns:xlink="http://www.w3.org/1999/xlink" '
             f'width="{W}" height="{H}" viewBox="0 0 {W} {H}">'
@@ -633,7 +590,7 @@ def back_page():
 
     # ---- kolom kiri: profil
     p.append(eyebrow(BX, 272, "TENTANG KAMI", GREEN))
-    p.append(text(BX - 2, 334, "Bank Mitra Mentari Sejahtera", 42, 400, NAVY,
+    p.append(text(BX, 334, "Bank Mitra Mentari Sejahtera", 42, 400, NAVY,
                   family=F_TITLE))
     p.append(line(BX, 364, BX + BW, 364, HAIR, 1.4))
     y = 408
@@ -656,7 +613,6 @@ def back_page():
     p.append(f'<rect x="{BX}" y="1136" width="{BW}" height="164" '
              f'fill="url(#navyGrad)"/>')
     p.append(rrect(BX, 1136, BW, 4, 0, "url(#goldGrad)"))
-    p.append(pattern_band(BX + 40, 1156, BW - 80, GOLD_BRIGHT, 40, 6, 0.25, 1.0))
     p.append(text(BX + BW / 2, 1232, "Pilihan Amanah Keluarga", 44, 400, WHITE,
                   anchor="middle", family=F_TITLE))
     p.append(diamond(BX + BW / 2, 1262, 7, GOLD_BRIGHT))
@@ -690,8 +646,6 @@ def back_footer_bar():
     p = [f'<rect x="{M}" y="{BAR_Y}" width="{W - 2 * M}" height="{BAR_H}" '
          f'fill="url(#navyGrad)"/>']
     p.append(rrect(M, BAR_Y, W - 2 * M, 4, 0, "url(#goldGrad)"))
-    p.append(pattern_band(M + 30, BAR_Y + 22, W - 2 * M - 60, GOLD_BRIGHT, 44,
-                          5.5, 0.22, 0.9))
     p.append(diamond(M + 26, BAR_Y + BAR_H / 2, 7, GOLD_BRIGHT))
     p.append(diamond(W - M - 26, BAR_Y + BAR_H / 2, 7, GOLD_BRIGHT))
     p.append(text(M + 40, BAR_Y + 44, ADDRESS, 19, 400, WHITE, family=F_BODY))
@@ -743,29 +697,24 @@ def scrims():
 
 
 def overlay_frame():
-    p = [rrect(22, 22, W - 44, H - 44, 0, "none", GOLD_BRIGHT, 2.2,
-               ' opacity="0.85"'),
-         rrect(30, 30, W - 60, H - 60, 0, "none", "#FFFFFF", 0.9,
-               ' opacity="0.45"')]
-    for sx, sy, cx, cy in [(1, 1, 22, 22), (-1, 1, W - 22, 22),
-                           (1, -1, 22, H - 22), (-1, -1, W - 22, H - 22)]:
-        p.append(arabesque_corner(cx, cy, 62, sx, sy, GOLD_BRIGHT, 1.8, 0.6))
-    return "".join(p)
+    """Tanpa bingkai: hanya garis rambut putih tipis di atas foto (konsisten
+    dengan halaman depan yang bersih)."""
+    return rrect(30, 30, W - 60, H - 60, 0, "none", "#FFFFFF", 0.8,
+                 ' opacity="0.28"')
 
 
 def overlay_header():
     # plat putih untuk logo agar tetap terbaca di atas foto
-    p = [f'<rect x="34" y="36" width="330" height="104" fill="#FFFFFF" '
-         f'opacity="0.95"/>',
-         rrect(34, 36, 330, 104, 0, "none", GOLD, 1.6)]
-    p.append(f'<image x="52" y="62" width="294" height="55.1" '
+    p = [f'<rect x="{M}" y="64" width="300" height="96" fill="#FFFFFF" '
+         f'opacity="0.96"/>',
+         rrect(M, 64, 300, 96, 0, "none", GOLD, 1.4)]
+    p.append(f'<image x="{M + 18}" y="86" width="264" height="49.5" '
              f'xlink:href="{logo_uri()}" preserveAspectRatio="xMidYMid meet"/>')
-    p.append(text(W - 56, 88, BRAND, 24, 800, WHITE, anchor="end", ls=7,
+    p.append(text(W - M, 100, BRAND, 21, 800, WHITE, anchor="end", ls=6,
                   family=F_BODY))
-    p.append(text(W - 56, 120, BRAND_TAG, 18, 400, GOLD_SOFT, anchor="end",
-                  ls=2.4, family=F_BODY))
-    p.append(line(W - 56 - tw(BRAND, 24, 800, 7, family=F_BODY), 136, W - 56, 136,
-                  GOLD_BRIGHT, 1.4, opacity=0.8))
+    p.append(text(W - M, 126, BRAND_TAG, 16, 400, GOLD_SOFT, anchor="end",
+                  ls=2, family=F_BODY))
+    p.append(line(M, 178, W - M, 178, GOLD_BRIGHT, 1.2, opacity=0.55))
     return "".join(p)
 
 
@@ -775,8 +724,8 @@ def overlay_caption():
     p.append(rrect(x, 1094, 52, 4, 0, GOLD_BRIGHT))
     p.append(text(x, 1112, OVERLAY_EYEBROW, 19, 800, GOLD_BRIGHT, ls=8,
                   family=F_BODY))
-    p.append(text(x - 3, 1206, OVERLAY_TITLE[0], 86, 400, WHITE, family=F_TITLE))
-    p.append(text(x - 3, 1296, OVERLAY_TITLE[1], 86, 400, WHITE, family=F_TITLE))
+    p.append(text(x, 1206, OVERLAY_TITLE[0], 86, 400, WHITE, family=F_TITLE))
+    p.append(text(x, 1296, OVERLAY_TITLE[1], 86, 400, WHITE, family=F_TITLE))
     p.append(text(x, 1342, OVERLAY_SUB, 22, 400, "#EAF1F7", family=F_BODY))
 
     # chip fitur (transparan + garis emas)
@@ -792,13 +741,15 @@ def overlay_caption():
 
 
 def overlay_footer():
-    y = 1428
-    p = [line(74, y, W - 74, y, "#FFFFFF", 1.2, opacity=0.35)]
-    p.append(text(74, y + 26, ADDRESS, 18, 400, WHITE, family=F_BODY))
-    p.append(text(74, y + 50, CONTACT_LINE, 15, 400, GOLD_SOFT, family=F_BODY))
-    p.append(text(W - 74, y + 26, "PT BPRS Mitra Mentari Sejahtera", 18, 800,
+    """Kaki halaman foto: ritme & margin sama dengan halaman depan."""
+    y = 1424
+    p = [line(M, y, W - M, y, "#FFFFFF", 1, opacity=0.30)]
+    p.append(text(M, y + 28, ADDRESS, 18, 400, WHITE, family=F_BODY))
+    p.append(text(M, y + 54, CONTACT_LINE, 15, 400, GOLD_SOFT,
+                  family=F_BODY))
+    p.append(text(W - M, y + 28, "PT BPRS Mitra Mentari Sejahtera", 18, 800,
                   WHITE, anchor="end", family=F_BODY))
-    p.append(text(W - 74, y + 50, "Berizin & Diawasi oleh OJK  \u00b7  Peserta "
+    p.append(text(W - M, y + 54, "Berizin & Diawasi oleh OJK  ·  Peserta "
                   "Penjaminan LPS", 13, 400, GOLD_SOFT, anchor="end",
                   family=F_BODY))
     return "".join(p)
@@ -817,3 +768,7 @@ def build_back_photo():
             f'width="{W}" height="{H}" viewBox="0 0 {W} {H}">'
             f'{defs()}{body}</svg>')
 
+
+
+if __name__ == "__main__":
+    main()
