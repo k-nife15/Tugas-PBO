@@ -43,6 +43,17 @@ def main():
         print(f"{out.name} <- {src.name} | {img.width}x{img.height}px "
               f"@{dpi:.0f}dpi ({mm:.0f}x{img.height / dpi * 25.4:.0f} mm)")
 
+    # --- gabungan 2 halaman (depan + belakang) untuk percetakan bolak-balik
+    front = DIST / "kalender-2027-biru-hijau-emas@2x.png"
+    back = DIST / "kalender-2027-biru-hijau-emas-belakang@2x.png"
+    if front.exists() and back.exists():
+        pages = [Image.open(p).convert("RGB") for p in (front, back)]
+        dpi = pages[0].width / 213.0 * 25.4
+        out = DIST / "kalender-2027-cetak-2halaman.pdf"
+        pages[0].save(out, "PDF", resolution=dpi, save_all=True,
+                      append_images=pages[1:])
+        print(f"{out.name} <- 2 halaman (depan + belakang) @{dpi:.0f}dpi")
+
 
 if __name__ == "__main__":
     main()

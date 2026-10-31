@@ -540,6 +540,7 @@ def main():
     suffix = "-placeholder" if PHOTO_PLACEHOLDER else ""
     base = f"kalender-2027-biru-hijau-emas{suffix}"
     (DIST / f"{base}.svg").write_text(build_svg(), encoding="utf-8")
+    (DIST / f"{base}-belakang.svg").write_text(build_back(), encoding="utf-8")
     meta = {
         "title": "Kalender Meja Januari 2027 - corporate elegant",
         "variant": "corporate-elegant",
@@ -556,6 +557,166 @@ def main():
     (DIST / f"{base}-data.json").write_text(
         json.dumps(meta, indent=2, ensure_ascii=False), encoding="utf-8")
     print("SVG + JSON written:", base)
+
+
+
+
+
+# ----------------------------------------------------------------------------
+# 6. HALAMAN BELAKANG — PROFIL & PRODUK
+# ----------------------------------------------------------------------------
+# Draf konten: mohon dikoreksi/diresmikan oleh pihak bank sebelum cetak.
+PROFILE_PARAS = [
+    ("BPRS Mitra Mentari Sejahtera adalah lembaga keuangan mikro syariah yang "
+     "berizin dan diawasi oleh OJK, hadir melayani masyarakat Bengkulu dengan "
+     "prinsip syariah yang amanah dan transparan."),
+    ("Kami tumbuh bersama nasabah: membuka akses permodalan usaha, mendorong "
+     "semangat menabung, dan menemani langkah spiritual umat melalui layanan "
+     "perjalanan ibadah."),
+    ("Sebagai bagian dari ekosistem Bank Mitra Syariah, kami berkomitmen "
+     "menghadirkan layanan yang halal, adil, dan bermanfaat bagi banyak orang."),
+]
+VALUES = [
+    ("Amanah", "Menyampaikan apa adanya, tanpa kelebihan dan kekurangan.", BLUE),
+    ("Transparan", "Terbuka dalam setiap muamalah dan pengelolaan dana.", GREEN),
+    ("Terjangkau", "Layanan keuangan syariah yang dekat dengan masyarakat.", GOLD),
+]
+PRODUCTS = [
+    ("SIMIRA",
+     "Simpanan Mitra Rencana — tabungan berencana harian mulai Rp40.000,-/hari "
+     "sebagai persiapan dana umroh."),
+    ("Tabungan Umroh Mitra",
+     "Program tabungan ibadah: Haji tahun ini menjadi do'a, Umroh tahun depan "
+     "jadi nyata."),
+    ("Pembiayaan Mikro",
+     "Pembiayaan usaha dengan akad syariah bagi pelaku UMKM dan masyarakat "
+     "sekitar."),
+    ("Layanan Lainnya",
+     "Produk dan layanan syariah lainnya \u2014 silakan berkonsultasi dengan "
+     "petugas kami."),
+]
+ADDRESS = "Kantor Kami  \u2014  Jl. Ayunda No. 23, Panorama, Bengkulu"
+CONTACT_LINE = ("0813-1349-9673   \u00b7   mitrasyariahbank.co.id   \u00b7   "
+                "@mitrasyariahbank")
+
+BX, BW = 56, 944           # kolom kiri (profil)
+PX, PW = 1044, 1030        # kolom kanan (produk)
+DIV_X = 1022               # pembatas vertikal
+BTOP, BBOT = 220, 1300
+BAR_Y, BAR_H = 1330, 96
+
+
+def eyebrow(x, y, label, color):
+    return (rrect(x, y - 16, 46, 4, 0, color) +
+            text(x + 62, y, label, 18, 800, color, ls=7, family=F_BODY))
+
+
+def back_page():
+    p = []
+    p.append(star8(300, 1150, 240, stroke=BLUE, sw=2, opacity=0.04))
+    p.append(star8(1800, 420, 240, stroke=GREEN, sw=2, opacity=0.04))
+
+    # ---- kolom kiri: profil
+    p.append(eyebrow(BX, 272, "TENTANG KAMI", GREEN))
+    p.append(text(BX - 2, 334, "Bank Mitra Mentari Sejahtera", 42, 400, NAVY,
+                  family=F_TITLE))
+    p.append(line(BX, 364, BX + BW, 364, HAIR, 1.4))
+    y = 408
+    for para in PROFILE_PARAS:
+        for ln in wrap(para, 21, 400, BW - 16, family=F_BODY):
+            p.append(text(BX, y, ln, 21, 400, "#41505E", family=F_BODY))
+            y += 33
+        y += 12
+
+    p.append(eyebrow(BX, 800, "NILAI KAMI", GREEN))
+    vy = 858
+    for name, desc, color in VALUES:
+        p.append(star8(BX + 22, vy - 9, 24, fill=color))
+        p.append(star8(BX + 22, vy - 9, 11, fill=WHITE))
+        p.append(text(BX + 64, vy, name, 24, 800, NAVY, family=F_BODY))
+        p.append(text(BX + 64, vy + 30, desc, 17, 400, MUTED, family=F_BODY))
+        vy += 74
+
+    # blok tagline navy
+    p.append(f'<rect x="{BX}" y="1136" width="{BW}" height="164" '
+             f'fill="url(#navyGrad)"/>')
+    p.append(rrect(BX, 1136, BW, 4, 0, "url(#goldGrad)"))
+    p.append(pattern_band(BX + 40, 1156, BW - 80, GOLD_BRIGHT, 40, 6, 0.25, 1.0))
+    p.append(text(BX + BW / 2, 1232, "Pilihan Amanah Keluarga", 44, 400, WHITE,
+                  anchor="middle", family=F_TITLE))
+    p.append(diamond(BX + BW / 2, 1262, 7, GOLD_BRIGHT))
+    p.append(text(BX + BW / 2, 1286, "BANK MITRA SYARIAH  \u00b7  BENGKULU", 15,
+                  700, GOLD_SOFT, anchor="middle", ls=6, family=F_BODY))
+    return "".join(p)
+
+
+def back_products():
+    p = []
+    p.append(eyebrow(PX, 272, "PRODUK & LAYANAN", BLUE))
+    ry = 330
+    for i, (name, desc) in enumerate(PRODUCTS):
+        p.append(text(PX, ry + 14, f"0{i + 1}", 22, 800, GOLD, ls=1,
+                      family=F_BODY))
+        p.append(text(PX + 66, ry + 16, name, 34, 400, NAVY, family=F_TITLE))
+        for j, ln in enumerate(wrap(desc, 18, 400, PW - 120, family=F_BODY)[:2]):
+            p.append(text(PX + 66, ry + 58 + j * 30, ln, 18, 400, MUTED,
+                          family=F_BODY))
+        p.append(star8(PX + PW - 14, ry + 22, 13, stroke=GOLD, sw=1.2,
+                       opacity=0.7))
+        p.append(line(PX, ry + 170, PX + PW, ry + 170, HAIR, 1.2))
+        ry += 230
+    p.append(text(PX, ry + 8, "Layanan lainnya dapat ditanyakan langsung ke "
+                  "kantor kami \u2014 dengan akad syariah yang transparan.", 18,
+                  400, MUTED, family=F_BODY))
+    return "".join(p)
+
+
+def back_footer_bar():
+    p = [f'<rect x="{M}" y="{BAR_Y}" width="{W - 2 * M}" height="{BAR_H}" '
+         f'fill="url(#navyGrad)"/>']
+    p.append(rrect(M, BAR_Y, W - 2 * M, 4, 0, "url(#goldGrad)"))
+    p.append(pattern_band(M + 30, BAR_Y + 22, W - 2 * M - 60, GOLD_BRIGHT, 44,
+                          5.5, 0.22, 0.9))
+    p.append(diamond(M + 26, BAR_Y + BAR_H / 2, 7, GOLD_BRIGHT))
+    p.append(diamond(W - M - 26, BAR_Y + BAR_H / 2, 7, GOLD_BRIGHT))
+    p.append(text(M + 40, BAR_Y + 44, ADDRESS, 19, 400, WHITE, family=F_BODY))
+    p.append(text(M + 40, BAR_Y + 74, CONTACT_LINE, 16, 400, GOLD_SOFT,
+                  family=F_BODY))
+    p.append(text(W - M - 40, BAR_Y + 44, "PT BPRS Mitra Mentari Sejahtera", 19,
+                  800, WHITE, anchor="end", family=F_BODY))
+    p.append(text(W - M - 40, BAR_Y + 74, "Berizin & Diawasi oleh OJK  \u00b7  "
+                  "Peserta Penjaminan LPS", 14, 400, GOLD_SOFT, anchor="end",
+                  family=F_BODY))
+    # kaki halaman (ritme sama dengan depan)
+    p.append(line(M, 1450, W / 2 - 150, 1450, HAIR, 1.4))
+    p.append(line(W / 2 + 150, 1450, W - M, 1450, HAIR, 1.4))
+    p.append(flourish(W / 2, 1450, 140, GOLD, 1.3))
+    p.append(text(M, 1484, OJK, 16, 400, MUTED, family=F_BODY))
+    p.append(text(W - M, 1484, HEAD_TAG, 16, 700, GOLD, anchor="end", ls=4,
+                  family=F_BODY))
+    return "".join(p)
+
+
+def build_back():
+    body = "".join([background(), header(), back_page(), back_products(),
+                    vertical_ornament(DIV_X, BTOP, BBOT), back_footer_bar()])
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" '
+            f'xmlns:xlink="http://www.w3.org/1999/xlink" '
+            f'width="{W}" height="{H}" viewBox="0 0 {W} {H}">'
+            f'{defs()}{body}</svg>')
+
+
+    # blok tagline navy
+    p.append(f'<rect x="{BX}" y="1136" width="{BW}" height="164" '
+             f'fill="url(#navyGrad)"/>')
+    p.append(rrect(BX, 1136, BW, 4, 0, "url(#goldGrad)"))
+    p.append(pattern_band(BX + 40, 1156, BW - 80, GOLD_BRIGHT, 40, 6, 0.25, 1.0))
+    p.append(text(BX + BW / 2, 1232, "Pilihan Amanah Keluarga", 44, 400, WHITE,
+                  anchor="middle", family=F_TITLE))
+    p.append(diamond(BX + BW / 2, 1262, 7, GOLD_BRIGHT))
+    p.append(text(BX + BW / 2, 1286, "BANK MITRA SYARIAH  \u00b7  BENGKULU", 15,
+                  700, GOLD_SOFT, anchor="middle", ls=6, family=F_BODY))
+    return "".join(p)
 
 
 if __name__ == "__main__":

@@ -19,6 +19,9 @@ lalu digambar ulang penuh (bukan sekadar skala dari desain lama).
 | `kalender-2027-biru-hijau-emas@2x.png` | 4260×3040 px (508 dpi) — preview / percetakan digital |
 | `kalender-2027-biru-hijau-emas-print.pdf` | **213 × 152 mm**, 508 dpi — siap cetak |
 | `kalender-2027-biru-hijau-emas-data.json` | Data 42 sel: Masehi, Hijriah, Jawa, pasaran, nama tahun Jawa |
+| `kalender-2027-biru-hijau-emas-belakang.svg` | **Halaman belakang** (profil & produk) — vektor 2130×1520 |
+| `kalender-2027-biru-hijau-emas-belakang@2x.png` / `-print.pdf` | Render halaman belakang (508 dpi, 213 × 152 mm) |
+| `kalender-2027-cetak-2halaman.pdf` | **PDF 2 halaman** (depan + belakang) untuk cetak bolak-balik |
 
 ## Spesifikasi
 
@@ -69,6 +72,29 @@ dirender sebagai `<text>`. Semua teks Arab di sini di-shape dengan **HarfBuzz**
 - Ganti foto: timpa `assets/foto-promo.png` (rasio mendekati 1,7 : 1), lalu regenerate.
 - Slot kosong: set `PHOTO_PLACEHOLDER = True` di `generate.py` → keluaran bernama
   `kalender-2027-biru-hijau-emas-placeholder.*` (kotak garis putus-putus + label).
+
+## Halaman belakang — Profil & Produk
+
+Konsep: pasangan dari halaman depan (dasar putih, blok navy, arabesque, aksen
+biru–hijau–emas), tetapi fungsinya **identitas & informasi**.
+
+| Zona | Isi |
+|---|---|
+| Kepala | logo + `BANK MITRA SYARIAH` + pita tiga warna (identik dengan depan) |
+| Kiri atas | eyebrow `TENTANG KAMI` + judul serif + **3 paragraf profil** |
+| Kiri tengah | eyebrow `NILAI KAMI` + 3 nilai dengan **medali khatim** biru/hijau/emas (Amanah, Transparan, Terjangkau) |
+| Kiri bawah | **blok navy tagline** “Pilihan Amanah Keluarga” + pita khatim emas |
+| Kanan | eyebrow `PRODUK & LAYANAN` + **4 baris produk** bernomor (SIMIRA, Tabungan Umroh Mitra, Pembiayaan Mikro, Layanan Lainnya) dengan garis rambut & penanda khatim |
+| Bawah | **bar kontak navy**: alamat kantor, telepon/web/IG, legal OJK+LPS |
+| Kaki | garis rambut + pembatas flourish + legal + `KALENDER MEJA · 2027` |
+
+**⚠️ Konten yang perlu dikonfirmasi sebelum cetak** (ada di konstanta
+`PROFILE_PARAS`, `VALUES`, `PRODUCTS`, `ADDRESS` pada `generate.py`):
+
+1. Teks profil — saya buat draf dari materi yang ada; mohon dikoreksi sesuai profil resmi.
+2. Baris produk **03 Pembiayaan Mikro** dan **04 Layanan Lainnya** masih generik
+   (nama & akad resmi perlu diisi).
+3. Alamat & kontak diambil dari file Figma (`Jl. Ayunda No. 23, Panorama, Bengkulu`).
 
 ## Data & akurasi
 
