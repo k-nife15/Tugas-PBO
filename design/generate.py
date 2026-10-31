@@ -218,6 +218,19 @@ def defs():
     <stop offset="0" stop-color="{NAVY}" stop-opacity="0.55"/>
     <stop offset="1" stop-color="{NAVY}" stop-opacity="0"/>
   </linearGradient>
+  <linearGradient id="scrimTop" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="{NAVY}" stop-opacity="0.72"/>
+    <stop offset="1" stop-color="{NAVY}" stop-opacity="0"/>
+  </linearGradient>
+  <linearGradient id="scrimBottom" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="{NAVY}" stop-opacity="0"/>
+    <stop offset="0.42" stop-color="{NAVY}" stop-opacity="0.72"/>
+    <stop offset="1" stop-color="{NAVY}" stop-opacity="0.94"/>
+  </linearGradient>
+  <linearGradient id="scrimLeft" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="{NAVY}" stop-opacity="0.55"/>
+    <stop offset="1" stop-color="{NAVY}" stop-opacity="0"/>
+  </linearGradient>
   <clipPath id="photoClip">
     <rect x="{LX}" y="{TOP}" width="{LW}" height="{PHOTO_H}"/>
   </clipPath>
@@ -540,7 +553,9 @@ def main():
     suffix = "-placeholder" if PHOTO_PLACEHOLDER else ""
     base = f"kalender-2027-biru-hijau-emas{suffix}"
     (DIST / f"{base}.svg").write_text(build_svg(), encoding="utf-8")
-    (DIST / f"{base}-belakang.svg").write_text(build_back(), encoding="utf-8")
+    # halaman belakang: default = foto penuh; varian profil disimpan terpisah
+    (DIST / f"{base}-belakang.svg").write_text(build_back_photo(), encoding="utf-8")
+    (DIST / f"{base}-belakang-profil.svg").write_text(build_back(), encoding="utf-8")
     meta = {
         "title": "Kalender Meja Januari 2027 - corporate elegant",
         "variant": "corporate-elegant",
@@ -706,18 +721,99 @@ def build_back():
             f'{defs()}{body}</svg>')
 
 
-    # blok tagline navy
-    p.append(f'<rect x="{BX}" y="1136" width="{BW}" height="164" '
-             f'fill="url(#navyGrad)"/>')
-    p.append(rrect(BX, 1136, BW, 4, 0, "url(#goldGrad)"))
-    p.append(pattern_band(BX + 40, 1156, BW - 80, GOLD_BRIGHT, 40, 6, 0.25, 1.0))
-    p.append(text(BX + BW / 2, 1232, "Pilihan Amanah Keluarga", 44, 400, WHITE,
-                  anchor="middle", family=F_TITLE))
-    p.append(diamond(BX + BW / 2, 1262, 7, GOLD_BRIGHT))
-    p.append(text(BX + BW / 2, 1286, "BANK MITRA SYARIAH  \u00b7  BENGKULU", 15,
-                  700, GOLD_SOFT, anchor="middle", ls=6, family=F_BODY))
+# ----------------------------------------------------------------------------
+# 7. HALAMAN FOTO PENUH (full-bleed) — teks menumpuk di atas foto
+# ----------------------------------------------------------------------------
+OVERLAY_EYEBROW = "PROGRAM UMROH 2027"
+OVERLAY_TITLE = ["Tabungan", "Umroh Mitra"]
+OVERLAY_SUB = "Hajilah tahun ini menjadi do'a \u2014 umroh tahun depan jadi nyata."
+OVERLAY_CHIPS = ["MULAI Rp40.000,-/HARI", "AKAD SYARIAH", "TRAVEL PPU & PIHK"]
+
+
+def scrims():
+    return "".join([
+        # atas: agar logo & brand terbaca
+        f'<rect x="0" y="0" width="{W}" height="330" fill="url(#scrimTop)"/>',
+        # bawah: area judul & kontak
+        f'<rect x="0" y="{H - 900}" width="{W}" height="900" '
+        f'fill="url(#scrimBottom)"/>',
+        # tepi kiri sedikit digelapkan agar teks menempel nyaman
+        f'<rect x="0" y="0" width="520" height="{H}" fill="url(#scrimLeft)"/>',
+    ])
+
+
+def overlay_frame():
+    p = [rrect(22, 22, W - 44, H - 44, 0, "none", GOLD_BRIGHT, 2.2,
+               ' opacity="0.85"'),
+         rrect(30, 30, W - 60, H - 60, 0, "none", "#FFFFFF", 0.9,
+               ' opacity="0.45"')]
+    for sx, sy, cx, cy in [(1, 1, 22, 22), (-1, 1, W - 22, 22),
+                           (1, -1, 22, H - 22), (-1, -1, W - 22, H - 22)]:
+        p.append(arabesque_corner(cx, cy, 62, sx, sy, GOLD_BRIGHT, 1.8, 0.6))
     return "".join(p)
 
 
-if __name__ == "__main__":
-    main()
+def overlay_header():
+    # plat putih untuk logo agar tetap terbaca di atas foto
+    p = [f'<rect x="34" y="36" width="330" height="104" fill="#FFFFFF" '
+         f'opacity="0.95"/>',
+         rrect(34, 36, 330, 104, 0, "none", GOLD, 1.6)]
+    p.append(f'<image x="52" y="62" width="294" height="55.1" '
+             f'xlink:href="{logo_uri()}" preserveAspectRatio="xMidYMid meet"/>')
+    p.append(text(W - 56, 88, BRAND, 24, 800, WHITE, anchor="end", ls=7,
+                  family=F_BODY))
+    p.append(text(W - 56, 120, BRAND_TAG, 18, 400, GOLD_SOFT, anchor="end",
+                  ls=2.4, family=F_BODY))
+    p.append(line(W - 56 - tw(BRAND, 24, 800, 7, family=F_BODY), 136, W - 56, 136,
+                  GOLD_BRIGHT, 1.4, opacity=0.8))
+    return "".join(p)
+
+
+def overlay_caption():
+    p = []
+    x = 74
+    p.append(rrect(x, 1094, 52, 4, 0, GOLD_BRIGHT))
+    p.append(text(x, 1112, OVERLAY_EYEBROW, 19, 800, GOLD_BRIGHT, ls=8,
+                  family=F_BODY))
+    p.append(text(x - 3, 1206, OVERLAY_TITLE[0], 86, 400, WHITE, family=F_TITLE))
+    p.append(text(x - 3, 1296, OVERLAY_TITLE[1], 86, 400, WHITE, family=F_TITLE))
+    p.append(text(x, 1342, OVERLAY_SUB, 22, 400, "#EAF1F7", family=F_BODY))
+
+    # chip fitur (transparan + garis emas)
+    cxp = x
+    for label in OVERLAY_CHIPS:
+        wd = tw(label, 15, 700, 4, family=F_BODY) + 44
+        p.append(rrect(cxp, 1364, wd, 42, 21, "#0B2E4F",
+                       GOLD_BRIGHT, 1.2, ' opacity="0.55"'))
+        p.append(text(cxp + wd / 2, 1391, label, 15, 700, GOLD_SOFT,
+                      anchor="middle", ls=4, family=F_BODY))
+        cxp += wd + 16
+    return "".join(p)
+
+
+def overlay_footer():
+    y = 1428
+    p = [line(74, y, W - 74, y, "#FFFFFF", 1.2, opacity=0.35)]
+    p.append(text(74, y + 26, ADDRESS, 18, 400, WHITE, family=F_BODY))
+    p.append(text(74, y + 50, CONTACT_LINE, 15, 400, GOLD_SOFT, family=F_BODY))
+    p.append(text(W - 74, y + 26, "PT BPRS Mitra Mentari Sejahtera", 18, 800,
+                  WHITE, anchor="end", family=F_BODY))
+    p.append(text(W - 74, y + 50, "Berizin & Diawasi oleh OJK  \u00b7  Peserta "
+                  "Penjaminan LPS", 13, 400, GOLD_SOFT, anchor="end",
+                  family=F_BODY))
+    return "".join(p)
+
+
+def build_back_photo():
+    body = "".join([
+        f'<rect x="0" y="0" width="{W}" height="{H}" fill="{WHITE}"/>',
+        f'<image x="0" y="0" width="{W}" height="{H}" '
+        f'xlink:href="{photo_uri()}" preserveAspectRatio="xMidYMid slice"/>',
+        scrims(), overlay_frame(), overlay_header(), overlay_caption(),
+        overlay_footer(),
+    ])
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" '
+            f'xmlns:xlink="http://www.w3.org/1999/xlink" '
+            f'width="{W}" height="{H}" viewBox="0 0 {W} {H}">'
+            f'{defs()}{body}</svg>')
+

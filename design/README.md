@@ -19,8 +19,10 @@ lalu digambar ulang penuh (bukan sekadar skala dari desain lama).
 | `kalender-2027-biru-hijau-emas@2x.png` | 4260×3040 px (508 dpi) — preview / percetakan digital |
 | `kalender-2027-biru-hijau-emas-print.pdf` | **213 × 152 mm**, 508 dpi — siap cetak |
 | `kalender-2027-biru-hijau-emas-data.json` | Data 42 sel: Masehi, Hijriah, Jawa, pasaran, nama tahun Jawa |
-| `kalender-2027-biru-hijau-emas-belakang.svg` | **Halaman belakang** (profil & produk) — vektor 2130×1520 |
-| `kalender-2027-biru-hijau-emas-belakang@2x.png` / `-print.pdf` | Render halaman belakang (508 dpi, 213 × 152 mm) |
+| `kalender-2027-biru-hijau-emas-belakang.svg` | **Halaman belakang — foto penuh** (full-bleed + teks menumpuk) |
+| `kalender-2027-biru-hijau-emas-belakang-profil.svg` | Halaman belakang alternatif: **profil & produk** |
+| `...-belakang@2x.png` / `...-belakang-print.pdf` | Render halaman foto (508 dpi, 213 × 152 mm) |
+| `...-belakang-profil@2x.png` / `...-belakang-profil-print.pdf` | Render halaman profil |
 | `kalender-2027-cetak-2halaman.pdf` | **PDF 2 halaman** (depan + belakang) untuk cetak bolak-balik |
 
 ## Spesifikasi
@@ -73,7 +75,25 @@ dirender sebagai `<text>`. Semua teks Arab di sini di-shape dengan **HarfBuzz**
 - Slot kosong: set `PHOTO_PLACEHOLDER = True` di `generate.py` → keluaran bernama
   `kalender-2027-biru-hijau-emas-placeholder.*` (kotak garis putus-putus + label).
 
-## Halaman belakang — Profil & Produk
+## Halaman belakang — 2 opsi
+
+| Mode | Berkas | Konsep |
+|---|---|---|
+| **A. Foto penuh** (default) | `...-belakang.*` | Foto **full-bleed** menutupi seluruh halaman; judul, sub-judul, chip fitur, dan kontak **menumpuk di atas foto** dengan *scrim* navy agar tetap terbaca. Bingkai emas tipis + arabesque sudut + plat putih logo. |
+| **B. Profil & produk** (alternatif) | `...-belakang-profil.*` | Dasar putih dua kolom: profil + nilai perusahaan + daftar produk + bar kontak navy. |
+
+> Untuk cetak mode A, percetakan perlu **bleed 3 mm** (desain ini dibuat tepat 213 × 152 mm; minta printer menambahkan bleed dari gambar yang sama, atau saya siapkan versi bleed bila diperlukan).
+
+### Mode A — detail lapisan
+
+1. Foto (cover crop, `xMidYMid slice`) menutupi 2130 × 1520.
+2. Tiga *scrim* gradasi navy: atas (logo/brand), kiri (area teks), bawah (judul → kontak).
+3. Bingkai emas ganda + arabesque di 4 sudut (garis putih/emas agar terlihat di atas foto).
+4. Plat putih berlogo di kiri atas (agar logo berwarna tetap terbaca).
+5. Kaption: eyebrow emas → judul serif 2 baris putih 86 px → sub-judul → 3 chip fitur transparan.
+6. Kaki: garis putih + alamat/kontak + legal OJK & LPS.
+
+### Mode B — Profil & Produk
 
 Konsep: pasangan dari halaman depan (dasar putih, blok navy, arabesque, aksen
 biru–hijau–emas), tetapi fungsinya **identitas & informasi**.

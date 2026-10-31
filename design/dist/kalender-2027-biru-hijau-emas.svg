@@ -11,6 +11,19 @@
     <stop offset="0" stop-color="#0B2E4F" stop-opacity="0.55"/>
     <stop offset="1" stop-color="#0B2E4F" stop-opacity="0"/>
   </linearGradient>
+  <linearGradient id="scrimTop" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#0B2E4F" stop-opacity="0.72"/>
+    <stop offset="1" stop-color="#0B2E4F" stop-opacity="0"/>
+  </linearGradient>
+  <linearGradient id="scrimBottom" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#0B2E4F" stop-opacity="0"/>
+    <stop offset="0.42" stop-color="#0B2E4F" stop-opacity="0.72"/>
+    <stop offset="1" stop-color="#0B2E4F" stop-opacity="0.94"/>
+  </linearGradient>
+  <linearGradient id="scrimLeft" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#0B2E4F" stop-opacity="0.55"/>
+    <stop offset="1" stop-color="#0B2E4F" stop-opacity="0"/>
+  </linearGradient>
   <clipPath id="photoClip">
     <rect x="56" y="200" width="744" height="430"/>
   </clipPath>
