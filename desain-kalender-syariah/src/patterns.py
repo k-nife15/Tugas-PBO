@@ -225,3 +225,83 @@ def glow_def(gid="glow_mint", color=None):
         f"</radialGradient>"
     )
 
+# --- 9. Placeholder QR code (pola dummy, bukan kode aktif) -------------
+def qr_placeholder(x, y, size, modules=25, seed=7, dark="#062B22",
+                   light="#FFFFFF", quiet=1.2, rx=1.6):
+    """Kotak QR dummy deterministik: quiet zone + 3 finder pattern + modul acak.
+
+    Catatan produksi: ganti dengan QR asli (ECC level M, min. 2x2 cm) sebelum
+    cetak; jangan menaruh elemen lain di dalam quiet zone.
+    """
+    import random
+    rnd = random.Random(seed)
+    inner = size - 2 * quiet
+    m = inner / modules
+    parts = [
+        f'<rect x="{f(x)}" y="{f(y)}" width="{f(size)}" height="{f(size)}" '
+        f'rx="{f(rx)}" fill="{light}"/>'
+    ]
+    gx, gy = x + quiet, y + quiet
+
+    def finder(i, j):
+        parts.append(f'<rect x="{f(gx + i * m)}" y="{f(gy + j * m)}" '
+                     f'width="{f(7 * m)}" height="{f(7 * m)}" fill="{dark}"/>')
+        parts.append(f'<rect x="{f(gx + (i + 1) * m)}" y="{f(gy + (j + 1) * m)}" '
+                     f'width="{f(5 * m)}" height="{f(5 * m)}" fill="{light}"/>')
+        parts.append(f'<rect x="{f(gx + (i + 2) * m)}" y="{f(gy + (j + 2) * m)}" '
+                     f'width="{f(3 * m)}" height="{f(3 * m)}" fill="{dark}"/>')
+
+    reserved = set()
+    for bi, bj in ((0, 0), (modules - 7, 0), (0, modules - 7)):
+        for i in range(7):
+            for j in range(7):
+                reserved.add((bi + i, bj + j))
+
+    for i in range(modules):
+        for j in range(modules):
+            if (i, j) in reserved:
+                continue
+            # pola timing + modul acak (deterministik)
+            if i == 6 or j == 6:
+                on = (i + j) % 2 == 0
+            else:
+                on = rnd.random() < 0.46
+            if on:
+                parts.append(f'<rect x="{f(gx + i * m)}" y="{f(gy + j * m)}" '
+                             f'width="{f(m)}" height="{f(m)}" fill="{dark}"/>')
+    finder(0, 0)
+    finder(modules - 7, 0)
+    finder(0, modules - 7)
+    return "".join(parts)
+
+
+# --- 10. Badge bulat ikon media sosial ---------------------------------
+def icon_badge(cx, cy, r, glyph, stroke=GOLD, color=None, sw=0.3,
+               fill="none", glyph_size=None):
+    """Lingkaran bergaris + glyph teks singkat (IG, f, X, ▶)."""
+    from svgkit import text as _text
+    col = color or stroke
+    gs = glyph_size or r * 1.15
+    body = [circle(cx, cy, r, fill=fill, stroke=stroke, sw=sw)]
+    body.append(_text(cx, cy + gs * 0.24, glyph, gs, "Montserrat", col,
+                      weight="bold", anchor="middle"))
+    return "".join(body)
+
+
+# --- 11. Kotak legalitas (OJK / LPS) ----------------------------------
+def legal_badge(x, y, w, h, label, caption, stroke=GOLD, color=None,
+                rx=1.4, sw=0.28):
+    from svgkit import text as _text
+    col = color or stroke
+    body = [
+        f'<rect x="{f(x)}" y="{f(y)}" width="{f(w)}" height="{f(h)}" '
+        f'rx="{f(rx)}" fill="none" stroke="{stroke}" stroke-width="{f(sw)}" '
+        f'stroke-opacity="0.75"/>',
+        _text(x + w / 2, y + h * 0.56, label, h * 0.42, "Montserrat", col,
+              weight="bold", tracking=0.08, anchor="middle"),
+        _text(x + w / 2, y + h * 0.88, caption, h * 0.20, "Montserrat", col,
+              tracking=0.1, anchor="middle"),
+    ]
+    return "".join(body)
+
+

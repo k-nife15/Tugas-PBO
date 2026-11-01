@@ -83,13 +83,15 @@ def text(x, y, s, size, family=SANS, fill="#000", weight=None, tracking=None,
 
 
 def rect(x, y, w, h, fill="none", stroke=None, sw=0.2, rx=0, opacity=None,
-         extra=""):
+         extra="", dash=None):
     a = [f'x="{f(x)}"', f'y="{f(y)}"', f'width="{f(w)}"', f'height="{f(h)}"']
     if rx:
         a.append(f'rx="{f(rx)}"')
     a.append(f'fill="{fill}"')
     if stroke:
         a.append(f'stroke="{stroke}" stroke-width="{f(sw)}"')
+    if dash:
+        a.append(f'stroke-dasharray="{dash}"')
     if opacity is not None:
         a.append(f'opacity="{f(opacity)}"')
     if extra:
