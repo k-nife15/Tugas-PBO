@@ -73,6 +73,7 @@ menghangatkan dan menyatu dengan kertas.
 
 Semua garis emas memakai ketebalan 0,18–0,50 pt (0,06–0,18 mm). Di bawah
 0,25 pt, garis **hanya boleh** dicetak sebagai foil atau spot, bukan proses
+CMYK — lihat `04-finishing-produksi.md`.
 
 ## 1.5 Cover depan — tata letak
 
@@ -165,4 +166,48 @@ Mint tetap dipakai sebagai glow agar kesan ramah tidak hilang; gold tetap
 identik sehingga foil tidak perlu dievaluasi ulang. Jalankan
 `python3 src/build.py` untuk melihat varian ini.
 
-CMYK — lihat `04-finishing-produksi.md`.
+## 1.10 Halaman bulanan — Januari 2027 (contoh lengkap)
+
+Halaman bulan memakai **dua sisi**: sisi depan = grid kalender, sisi belakang =
+halaman catatan. Pola ini berlaku untuk 12 bulan (tanggal dihitung otomatis di
+`src/calendar_data.py`, jadi Feb–Des mengikuti resep yang sama).
+
+### Sisi depan (grid)
+
+| Zona | Koordinat | Elemen |
+|---|---|---|
+| Pita jilid | y 0–15 | kosong + hairline emas 0,25 pt |
+| Kolom identitas | x 15–62 (pemisah emas di x = 64) | logo mono, "BULAN 01 / 12", **JANUARI** serif 24 pt, 2027 gold, rentang Hijriyah, angka **01** 50 pt gold |
+| Kartu pesan | (15, 94) 46 × 34 mm | "PESAN BULAN INI" + 3 baris serif — pengingat syariah, **bukan** kutipan ayat |
+| Grid kalender | x 68–201 (7 × 19 mm), y 30,5–132,5 | baris dinamis 5–6 sesuai jumlah pekan (Januari = 5 baris, tinggi 20,4 mm) |
+| Kepala hari | baseline y 27,2 | SEN–AHD 4 pt tracking 0,20 em; SAB & AHD gold |
+| Legenda | baseline y 139,2 | makna warna + catatan "tanggal Hijriyah = perkiraan hisab" |
+
+Detail penting:
+- **Tint Mint 12%** pada kolom Sabtu–Ahad, **Mint 10% + kotak Gold 12% + titik
+  emas** pada hari besar (1 Januari = Tahun Baru 2027).
+- Tanggal bulan tetangga (28–31 Desember) tetap dicetak pada opacity **20%**
+  supaya sel baris pertama tidak menjadi lubang kosong, tetapi tidak terbaca
+  sebagai bagian Januari.
+- Angka Hijriyah diletakkan **sebaris** dengan tanggal Gregorian (rata kanan
+  sel, 3,8 pt, gold) — bukan di sudut bawah sel — agar tidak "melayang" pada
+  sel tinggi.
+- Ruang kosong di bawah angka adalah **ruang menulis** yang disengaja
+  (kalender meja selalu dipakai mencatat).
+
+### Sisi belakang (catatan)
+
+| Zona | Koordinat | Elemen |
+|---|---|---|
+| Kepala | x 15 | "HALAMAN CATATAN" + **Januari 2027** serif 19 pt + rentang Hijriyah |
+| Watermark | pusat (170, 40) r = 21 | girih + rosetta pada 8–9% — mengisi ruang kosong tanpa mengganggu baca |
+| Rencana | x 15–98, 6 baris @ 4,6 mm | kotak centang 2,6 mm + garis titik-titik |
+| Catatan | x 106–201, 6 baris @ 4,6 mm | garis titik-titik bebas |
+| Pemisah | x 102, y 68–103 | hairline emas 0,25 pt (bahasa garis yang sama dengan cover) |
+| Kartu kutipan | (15, 108) 186 × 23 mm | serif 10,5 pt + medali bintang 8 |
+| Footer | y 137,6 | nama bank + nomor halaman gold |
+
+Alasan desain: sisi belakang dibuat **80% kosong-fungsional** (garis tulis)
+dengan hanya satu aksen emas besar (kartu kutipan), supaya tidak "berebut" dengan
+isi tulisan tangan pengguna.
+

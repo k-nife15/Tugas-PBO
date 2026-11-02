@@ -103,7 +103,23 @@ non-foilable; diskusikan dengan vendor sejak awal.
 Bila anggaran terbatas, urutan prioritas: (1) **foil angka tahun**, (2) **soft-touch**,
 (3) **spot UV pada lensa**, (4) emboss logo.
 
-## 4.8 Kesalahan finishing yang harus dihindari
+## 4.8 Halaman dalam (bulanan & catatan) — tanpa finishing khusus
+
+Halaman bulan (grid Januari dan seterusnya) serta halaman catatan **tidak**
+memakai foil, spot UV, emboss, maupun laminasi. Alasannya:
+
+1. Pengguna menulis di kalender — permukaan harus bisa ditulisi (soft-touch dan
+   spot UV justru menolak tinta pulpen).
+2. Foil pada garis hairline grid akan pecah dan mengganggu keterbacaan angka.
+3. Biaya 12 halaman × 2 sisi dengan foil tidak sebanding manfaatnya.
+
+Yang dipakai di halaman dalam: **1 hitam + emerald + gold + mint** (4 warna
+proses) pada kertas 150 gsm, dengan tint tipis agar tidak *set-off* ke halaman
+belakang. Ganti angka tahun pada halaman bulan dari gradasi gold menjadi
+**solid Warm Gold** bila vendor mencetak tanpa profil ICC yang baik — gradasi
+tipis pada area kecil mudah belang.
+
+## 4.9 Kesalahan finishing yang harus dihindari
 
 1. Foil di atas garis hairline < 0,3 pt → garis putus-putus seperti "garis
    pensil terhapus".

@@ -15,6 +15,7 @@ sys.path.insert(0, HERE)
 import front_cover  # noqa: E402
 import back_cover   # noqa: E402
 import spec_sheet   # noqa: E402
+import month_page   # noqa: E402
 
 SCALE = 4.0      # ~384 dpi untuk preview PNG
 
@@ -31,15 +32,15 @@ def emit(name: str, svg: str, dpi_scale: float = SCALE) -> None:
     print(f"  ✔ {name}: svg + png({dpi_scale:g}x) + pdf")
 
 
-def pair_preview() -> None:
-    """Gabungkan cover depan & belakang jadi satu lembar presentasi."""
+def pair_preview(name: str, items: list[tuple[str, str]]) -> None:
+    """Gabungkan dua halaman jadi satu lembar presentasi."""
     from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
-    front = Image.open(os.path.join(PREVIEW, "01-cover-depan.png"))
-    back = Image.open(os.path.join(PREVIEW, "02-cover-belakang.png"))
+    imgs = [(Image.open(os.path.join(PREVIEW, f"{n}.png")), lab)
+            for n, lab in items]
     gap, pad, cap = 150, 170, 190
-    W = pad * 2 + front.width * 2 + gap
-    H = pad * 2 + front.height + cap
+    W = pad * 2 + sum(i.width for i, _ in imgs) + gap * (len(imgs) - 1)
+    H = pad * 2 + max(i.height for i, _ in imgs) + cap
     sheet = Image.new("RGB", (W, H), "#EDEAE3")
     draw = ImageDraw.Draw(sheet)
 
@@ -48,11 +49,9 @@ def pair_preview() -> None:
         return ImageFont.truetype(path, size) if os.path.exists(path) \
             else ImageFont.load_default()
 
-    for i, (img, label) in enumerate(
-            ((front, "COVER DEPAN"), (back, "COVER BELAKANG"))):
-        x = pad + i * (front.width + gap)
+    x = pad
+    for img, label in imgs:
         y = pad
-        # bayangan lembut di bawah artwork
         shadow = Image.new("RGBA", (img.width + 80, img.height + 80),
                            (0, 0, 0, 0))
         ImageDraw.Draw(shadow).rectangle(
@@ -65,10 +64,11 @@ def pair_preview() -> None:
         tw = draw.textlength(label, font=f)
         draw.text((x + (img.width - tw) / 2, y + img.height + 56), label,
                   font=f, fill="#0E5241")
+        x += img.width + gap
 
-    out = os.path.join(PREVIEW, "00-pasangan-cover.png")
+    out = os.path.join(PREVIEW, f"{name}.png")
     sheet.resize((W // 2, H // 2), Image.LANCZOS).save(out, optimize=True)
-    print("  ✔ 00-pasangan-cover.png")
+    print(f"  ✔ {name}.png")
 
 
 def main() -> None:
@@ -78,7 +78,14 @@ def main() -> None:
     emit("01-cover-depan", front_cover.build())
     emit("02-cover-belakang", back_cover.build())
     emit("03-panduan-teknis", spec_sheet.build(), 3.0)
-    pair_preview()
+    emit("04-januari-depan", month_page.build_front())
+    emit("05-januari-belakang", month_page.build_back())
+    pair_preview("00-pasangan-cover",
+                 [("01-cover-depan", "COVER DEPAN"),
+                  ("02-cover-belakang", "COVER BELAKANG")])
+    pair_preview("06-pasangan-januari",
+                 [("04-januari-depan", "JANUARI 2027 — SISI DEPAN"),
+                  ("05-januari-belakang", "JANUARI 2027 — SISI BELAKANG")])
     print("Selesai.")
 
 

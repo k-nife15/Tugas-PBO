@@ -39,7 +39,31 @@ Ukuran dinyatakan dalam **pt** (dipakai di artwork) dengan padanan mm untuk ting
 | 8 | Catatan kaki legal | Montserrat / Regular 400 | 3,9 pt | 0 | Kalimat | Deep Ink 75% |
 | 9 | Copyright | Montserrat / Regular 400 | 4,0 pt | +0,02 em | Kalimat | Deep Ink 55% |
 
-## 2.4 Rasio & aturan hirarki
+## 2.4 Type scale (halaman bulanan & catatan)
+
+| Peran | Typeface / weight | Size | Tracking | Case | Warna |
+|---|---|---|---|---|---|
+| Nama bulan (grid) | Playfair Display / SemiBold | 24 pt | 0 | KAPITAL | Deep Emerald |
+| Angka bulan "01" | Playfair Display / Bold | 50 pt | 0 | Figur | Gradasi Gold |
+| Tahun di bawah bulan | Montserrat / SemiBold | 10 pt | +0,26 em | Figur | Gold Deep |
+| Rentang Hijriyah | Montserrat / Regular | 4,0 pt | +0,10 em | Kalimat | Emerald Mid 85% |
+| Label bulan ke-n | Montserrat / Medium | 3,9 pt | +0,24 em | KAPITAL | Gold Deep |
+| Kepala hari | Montserrat / SemiBold | 4,0 pt | +0,20 em | KAPITAL | Emerald / Gold (SAB–AHD) |
+| Tanggal | Montserrat / Bold | 9,4 pt | 0 | Figur | Deep Emerald |
+| Tanggal Hijriyah | Montserrat / Medium | 3,8 pt | 0 | Figur | Gold Deep 90% |
+| Tanggal bulan tetangga | Montserrat / Bold | 8,6 pt | 0 | Figur | Emerald 20% |
+| Nama hari besar | Montserrat / Medium | 3,2 pt | +0,04 em | Kalimat | Gold Deep |
+| Judul halaman catatan | Playfair Display / SemiBold | 19 pt | 0 | Kalimat | Deep Emerald |
+| Kartu kutipan | Playfair Display / SemiBold | 10,5 pt | 0 | Kalimat | Deep Emerald |
+| Label seksi (RENCANA/CATATAN) | Montserrat / SemiBold | 4,2 pt | +0,22 em | KAPITAL | Gold Deep |
+| Nomor halaman | Montserrat / SemiBold | 5,4 pt | +0,18 em | Figur | Gold Deep 80% |
+
+Catatan: nama hari besar 3,2 pt berada **sedikit di bawah** batas aman 4 pt —
+karena itu hanya dipakai untuk 1–2 sel per bulan (kata pendek, kontras tinggi di
+atas tint gold). Bila vendor menolak < 4 pt, naikkan ke 3,8 pt dan ganti label
+menjadi singkatan ("Tahun Baru").
+
+## 2.5 Rasio & aturan hirarki
 
 1. **Rasio antar tingkat ± 1,5–1,8×.** Contoh nyata di cover depan:
    44 → 23,5 (1,87×) → 13,2 (1,78×) → 5,0 (2,6×, lompatan disengaja agar
@@ -58,7 +82,7 @@ Ukuran dinyatakan dalam **pt** (dipakai di artwork) dengan padanan mm untuk ting
    baris 2 sans (aksi) tanpa tanda baca — jeda koma bekerja sebagai napas
    sebelum "Melangkah Bersama".
 
-## 2.5 Detail kerning & penyelarasan optis
+## 2.6 Detail kerning & penyelarasan optis
 
 - Koma pada "Tumbuh Berkah," **menggantung** keluar margin optis ± 0,35 mm
   agar tepi kiri blok judul tetap rata secara visual (hang punctuation).
@@ -69,7 +93,7 @@ Ukuran dinyatakan dalam **pt** (dipakai di artwork) dengan padanan mm untuk ting
 - Wordmark logo memakai *clear space* minimal 1× tinggi huruf kapital "S"
   (± 2,4 mm) di semua sisi; tidak boleh ada garis atau motif di dalamnya.
 
-## 2.6 Larangan
+## 2.7 Larangan
 
 - Jangan mencampur Playfair *Italic* pada teks tema (bertabrakan dengan sulur).
 - Jangan memakai Montserrat Bold untuk paragraf (hanya untuk angka & angka

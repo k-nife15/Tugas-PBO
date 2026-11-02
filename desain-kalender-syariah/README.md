@@ -12,7 +12,12 @@ gaya **playful elegant**, ukuran jadi **213 × 152 mm (landscape)** dengan
 |---|---|
 | ![Cover depan](preview/01-cover-depan.png) | ![Cover belakang](preview/02-cover-belakang.png) |
 
+| Halaman Januari 2027 — sisi depan (grid) | sisi belakang (catatan) |
+|---|---|
+| ![Januari depan](preview/04-januari-depan.png) | ![Januari belakang](preview/05-januari-belakang.png) |
+
 Pasangan cover satu lembar: `preview/00-pasangan-cover.png`
+Pasangan halaman Januari: `preview/06-pasangan-januari.png`
 Panduan teknis (bleed/trim/safe area/lubang Wire-O/palet): `preview/03-panduan-teknis.png`
 
 ## Dokumen konsep
@@ -31,16 +36,20 @@ desain-kalender-syariah/
 ├── assets/      # SVG sumber (bisa dibuka di Illustrator/Inkscape, satuan mm)
 │   ├── 01-cover-depan.svg
 │   ├── 02-cover-belakang.svg
-│   └── 03-panduan-teknis.svg
+│   ├── 03-panduan-teknis.svg
+│   ├── 04-januari-depan.svg     # halaman bulan: grid
+│   └── 05-januari-belakang.svg  # halaman bulan: catatan
 ├── preview/     # PNG preview (±384 dpi) + PDF vektor siap inspeksi
 ├── src/         # generator artwork (Python, satuan milimeter)
-│   ├── tokens.py       # palet, ukuran, copy
-│   ├── svgkit.py       # helper SVG + konversi mm/pt
-│   ├── patterns.py     # girih 8-fold, rosette, arabesque, QR dummy
-│   ├── front_cover.py  # komposisi cover depan
-│   ├── back_cover.py   # komposisi cover belakang
-│   ├── spec_sheet.py   # lembar panduan teknis
-│   └── build.py        # render SVG → PNG/PDF
+│   ├── tokens.py        # palet, ukuran, copy
+│   ├── svgkit.py        # helper SVG + konversi mm/pt
+│   ├── patterns.py      # girih 8-fold, rosette, arabesque, QR dummy
+│   ├── calendar_data.py # tanggal Gregorian + Hijriyah (hisab tabular)
+│   ├── front_cover.py   # komposisi cover depan
+│   ├── back_cover.py    # komposisi cover belakang
+│   ├── month_page.py    # halaman bulan (grid + catatan)
+│   ├── spec_sheet.py    # lembar panduan teknis
+│   └── build.py         # render SVG → PNG/PDF
 └── docs/
 ```
 
@@ -65,6 +74,13 @@ terbuka benar di Illustrator/Inkscape selama font tersebut aktif di sistem.
    memakai berkas logo resmi (vektor, warna asli, tanpa diputarbalik/diubah)
    sesuai ketentuan OJK & LPS, beserta kalimat penjaminan yang berlaku.
 5. **Tahun edisi** — 2027 (1448–1449 H) mengikuti siklus distribusi akhir 2026.
+6. **Tanggal Hijriyah & hari besar** — dihitung otomatis dengan hisab tabular
+   (`src/calendar_data.py`), sifatnya **perkiraan**. Verifikasi ke takwim
+   Kemenag lalu perbarui: rentang Hijriyah, angka Hijriyah harian di grid, dan
+   daftar hari besar (`HOLIDAYS_2027_01`). Hari besar keagamaan sengaja tidak
+   dicetak otomatis agar tidak salah tanggal.
+7. **Tanggal merah nasional** — tambahkan manual per bulan setelah SKB 3
+   Menteri terbit; jangan mengandalkan tebakan.
 
 Konten teks lainnya (kalimat komitmen syariah) sudah disusun sebagai contoh;
 silakan sesuaikan dengan *brand guideline* dan persetujuan legal/kepatuhan bank.

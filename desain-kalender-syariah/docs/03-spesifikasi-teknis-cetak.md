@@ -54,7 +54,12 @@ wire Ø 9,5 mm masih aman (memberi ruang buka yang lega).
 - **Baseline**: kelipatan 2,7 mm (setengah dari leading body 5,4 mm).
 - **Kisi informasi (cover belakang)**: 4 kolom × 46,5 mm, garis pemisah
   0,24 pt mulai 3 mm di bawah garis atas kisi.
-- **Kisi tanggal (halaman dalam)**: 7 kolom × 26,4 mm, 6 baris × 20 mm.
+- **Kisi tanggal (halaman bulanan)**: 7 kolom × **19,0 mm** mulai x = 68 mm,
+  area grid y 30,5–132,5 mm; **jumlah baris dinamis** 5–6 mengikuti pekan pada
+  bulan tersebut (Januari 2027 = 5 baris → tinggi baris 20,4 mm). Baris tidak
+  pernah diisi "baris kosong" — tinggi baris yang menyesuaikan.
+- **Kolom identitas bulan**: x 15–62 mm, pemisah garis emas di x = 64 mm.
+- **Halaman catatan**: dua blok 15–98 mm dan 106–201 mm, pitch baris 4,6 mm.
 
 ## 3.5 Persiapan berkas (pre-press checklist)
 
@@ -110,3 +115,7 @@ wire Ø 9,5 mm masih aman (memberi ruang buka yang lega).
 - [ ] Cek warna emerald konsisten antara cover depan & belakang (satu *run*).
 - [ ] Cek wire tidak menggores cover depan saat dibuka-tutup 20×.
 - [ ] Cek logo OJK/LPS utuh, tidak terpotong, dan kalimat penjaminan sesuai.
+- [ ] Cek tanggal Hijriyah & hari besar pada setiap halaman bulan terhadap
+      takwim Kemenag yang berlaku (jangan hanya percaya hasil hisab tabular).
+- [ ] Cek grid setiap bulan: tanggal 1 jatuh di kolom hari yang benar, dan
+      tidak ada tanggal yang hilang/terduplikasi di batas bulan.
